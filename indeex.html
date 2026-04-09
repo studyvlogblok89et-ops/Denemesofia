@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sofia | Neural Network & Backend Architect</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Fira+Code:wght@300;500&display=swap');
+
+        :root {
+            --neon-main: #bc13fe;
+            --neon-second: #00f2ff;
+            --dark-core: #020205;
+            --glass: rgba(15, 15, 25, 0.7);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        
+        body {
+            background-color: var(--dark-core);
+            font-family: 'Fira Code', monospace;
+            color: #fff;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 2px 2px, rgba(188, 19, 254, 0.15) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+
+        /* Animated Background Aura */
+        .aura {
+            position: fixed; width: 600px; height: 600px;
+            background: radial-gradient(circle, var(--neon-main) 0%, transparent 70%);
+            filter: blur(120px); opacity: 0.15; z-index: -1;
+            animation: move 10s infinite alternate;
+        }
+        @keyframes move { from { top: -10%; left: -10%; } to { top: 70%; left: 70%; } }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 50px 20px; }
+
+        /* Cyberpunk Header */
+        header {
+            border: 2px solid var(--neon-main);
+            padding: 40px; border-radius: 0 50px 0 50px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 30px rgba(188, 19, 254, 0.2);
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        header::before {
+            content: "SYSTEM STATUS: OPTIMIZED";
+            position: absolute; top: -15px; left: 30px;
+            background: var(--neon-main); padding: 5px 15px;
+            font-size: 10px; font-weight: bold; border-radius: 5px;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5rem; font-weight: 700;
+            letter-spacing: 5px; text-transform: uppercase;
+            background: linear-gradient(to right, #fff, var(--neon-main), var(--neon-second));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .typing { border-right: 3px solid var(--neon-second); animation: blink 0.7s infinite; }
+        @keyframes blink { 50% { border-color: transparent; } }
+
+        /* Pro Stats Section */
+        .stats-bar {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px; margin-bottom: 80px;
+        }
+        .stat-item {
+            text-align: center; padding: 20px; background: rgba(255,255,255,0.03);
+            border-bottom: 3px solid var(--neon-second);
+        }
+        .stat-value { font-size: 1.5rem; font-weight: bold; color: var(--neon-second); }
+        .stat-label { font-size: 0.7rem; opacity: 0.6; text-transform: uppercase; }
+
+        /* Certificate Master Cards */
+        .section-label { 
+            font-family: 'Orbitron', sans-serif; font-size: 1.2rem; 
+            margin-bottom: 40px; color: var(--neon-second); display: flex; align-items: center;
+        }
+        .section-label::before { content: ">>"; margin-right: 15px; color: var(--neon-main); }
+
+        .cert-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 40px; }
+
+        .cert-card {
+            position: relative; background: var(--glass);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px; padding: 30px; transition: 0.5s;
+            overflow: hidden;
+        }
+
+        .cert-card:hover {
+            border-color: var(--neon-main);
+            transform: scale(1.02) translateY(-10px);
+            box-shadow: 0 0 50px rgba(188, 19, 254, 0.3);
+        }
+
+        .cert-card img {
+            width: 100%; border-radius: 10px; margin-bottom: 25px;
+            filter: contrast(1.1) brightness(0.9); transition: 0.5s;
+        }
+        .cert-card:hover img { filter: brightness(1.1); }
+
+        /* Power Tags */
+        .power-stack { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 50px; }
+        .tag {
+            padding: 10px 20px; background: rgba(0, 242, 255, 0.05);
+            border: 1px solid var(--neon-second); border-radius: 5px;
+            font-size: 0.8rem; transition: 0.4s;
+        }
+        .tag:hover { background: var(--neon-second); color: #000; box-shadow: 0 0 20px var(--neon-second); }
+
+        footer { margin-top: 100px; text-align: center; padding: 50px; border-top: 1px solid rgba(255,255,255,0.1); opacity: 0.4; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            .cert-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="aura"></div>
+
+    <div class="container">
+        <header>
+            <p style="font-size: 0.8rem; letter-spacing: 3px; opacity: 0.7;">[ DATA ARCHITECT INITIALIZED ]</p>
+            <h1>SOFIA<span class="typing">_</span></h1>
+            <p style="font-size: 1.2rem; margin-top: 15px; color: var(--neon-second);">
+                High School Visionary // AI Engineering Candidate // Backend Specialist
+            </p>
+            <p style="margin-top: 25px; max-width: 700px; font-weight: 300; line-height: 1.8; opacity: 0.8;">
+                "I don't wait for the future. I code it into existence. Specializing in neural architectures, scalable backend systems, and pushing the boundaries of what's possible."
+            </p>
+        </header>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value">9th</div>
+                <div class="stat-label">Grade Level</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">2026</div>
+                <div class="stat-label">Target Year</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">∞</div>
+                <div class="stat-label">Motivation</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">READY</div>
+                <div class="stat-label">System Status</div>
+            </div>
+        </div>
+
+        <div class="section-label">VALIDATED EXPERTISE</div>
+        <div class="cert-grid">
+            <div class="cert-card">
+                <img src="15900.png" alt="Java Expert">
+                <h3 style="color: var(--neon-main); font-family: 'Orbitron';">JAVA OOP CORE</h3>
+                <p style="font-size: 0.9rem; margin-top: 10px; opacity: 0.7;">
+                    Implementing complex design patterns, inheritance, and polymorphism to build enterprise-grade software foundations.
+                </p>
+            </div>
+            <div class="cert-card">
+                <img src="15899.png" alt="FastAPI Expert">
+                <h3 style="color: var(--neon-second); font-family: 'Orbitron';">FASTAPI BACKEND</h3>
+                <p style="font-size: 0.9rem; margin-top: 10px; opacity: 0.7;">
+                    Developing high-concurrency asynchronous web services with automated documentation and Python-driven logic.
+                </p>
+            </div>
+        </div>
+
+        <div class="section-label" style="margin-top: 80px;">TECHNOLOGICAL ARSENAL</div>
+        <div class="power-stack">
+            <span class="tag">NEURAL NETWORKS</span>
+            <span class="tag">PYTHON 3.x</span>
+            <span class="tag">JAVA ECOSYSTEM</span>
+            <span class="tag">FASTAPI</span>
+            <span class="tag">ROBOTICS & ARDUINO</span>
+            <span class="tag">GAME LOGIC (REN'PY)</span>
+            <span class="tag">ALGORITHMIC THINKING</span>
+            <span class="tag">DATA STRUCTURES</span>
+        </div>
+
+        <footer>
+            <p>DESIGNED BY SOFIA | CORE VERSION 2026.04</p>
+            <p style="font-size: 10px; margin-top: 10px;">PROCEED WITH LOGIC.</p>
+        </footer>
+    </div>
+
+</body>
+</html>
+
