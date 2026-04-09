@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sofia | AI Engineer Candidate</title>
+    <style>
+        :root {
+            /* Arka planı morun derin bir tonu yaptım */
+            --bg: #2d134d; 
+            /* Kart arka planını daha koyu bir mor yaptım */
+            --card-bg: #1e0b36; 
+            /* Metinler açık mor/beyaz tonlarında */
+            --text: #e9e0f3; 
+            /* Vurgu rengi canlı mor */
+            --accent: #a371f7;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        .container { max-width: 800px; width: 100%; }
+        header { text-align: center; margin-bottom: 50px; border-bottom: 2px solid var(--accent); padding-bottom: 20px;}
+        h1 { color: var(--accent); font-size: 2.8rem; margin-bottom: 5px; }
+        .motto { font-style: italic; opacity: 0.9; color: #d0bfff; }
+        .subtitle { font-size: 1.1rem; }
+        
+        .section { margin-bottom: 40px; }
+        h2 { border-bottom: 1px solid rgba(163, 113, 247, 0.4); padding-bottom: 10px; color: #c4a1ff; }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(163, 113, 247, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 8px 25px rgba(163, 113, 247, 0.2); }
+        .card img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(163, 113, 247, 0.3);
+        }
+        .card h3 { margin: 10px 0; font-size: 1.25rem; color: #d6bcff; }
+        .card p { margin: 0; opacity: 0.8; font-size: 0.95rem; }
+        
+        ul { list-style-type: none; padding: 0; }
+        ul li { margin-bottom: 15px; background: rgba(163, 113, 247, 0.1); padding: 10px 15px; border-radius: 8px; border-left: 3px solid var(--accent); }
+        
+        .footer { margin-top: 60px; text-align: center; opacity: 0.7; font-size: 0.9rem; border-top: 1px solid rgba(163, 113, 247, 0.2); padding-top: 20px;}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Hi, I'm Sofia! 👋 🌙</h1>
+        <p class="motto">"In pursuit of the impossible..." 💜</p>
+        <p class="subtitle">9th Grade Student | Aspiring AI Engineer</p>
+    </header>
+
+    <div class="section">
+        <h2>🎓 Certifications</h2>
+        <div class="grid">
+            <div class="card">
+                <img src="15900.png" alt="Java Certificate">
+                <h3>Java OOP</h3>
+                <p>by Kunal Kushwaha (Cursa)</p>
+            </div>
+            <div class="card">
+                <img src="15899.png" alt="FastAPI Certificate">
+                <h3>Python FastAPI</h3>
+                <p>by Turtle Code (Cursa)</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🚀 Tech Stack & Learning Journey</h2>
+        <ul>
+            <li>🤖 <strong>Robotics:</strong> Arduino, mBlock (Hardware integration)</li>
+            <li>🐍 <strong>Software:</strong> Python, Java, Backend/API Dev</li>
+            <li>🎮 <strong>Game Dev:</strong> Ren’Py Visual Novel Project</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 Sofia - Built with Love, Code, and Purple Magic</p>
+    </div>
+</div>
+
+</body>
+</html>
