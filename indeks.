@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sofia | AI Engineer Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-glow: #bc13fe;
+            --secondary-glow: #420264;
+            --text-main: #f3e8ff;
+            --glass-bg: rgba(25, 10, 40, 0.7);
+            --border-color: rgba(188, 19, 254, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            cursor: default;
+        }
+
+        body {
+            background: radial-gradient(circle at top right, #2d0b5a, #0d0216);
+            background-attachment: fixed;
+            color: var(--text-main);
+            font-family: 'Space Grotesk', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Particles Effect */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,0.2) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,0.15) 1px, transparent 30px);
+            background-size: 550px 550px, 350px 350px;
+            background-position: 0 0, 40px 60px;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* Hero Section */
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .glitch-name {
+            font-size: 4.5rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(to right, #fff, var(--primary-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--primary-glow);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 10px;
+            box-shadow: 0 0 20px rgba(188, 19, 254, 0.4);
+        }
+
+        /* Section Styling */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 40px;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glass-panel:hover {
+            transform: scale(1.02);
+            border-color: var(--primary-glow);
+            box-shadow: 0 0 30px rgba(188, 19, 254, 0.1);
+        }
+
+        h2 {
+            font-family: 'Fira Code', monospace;
+            color: var(--primary-glow);
+            font-size: 1.8rem;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        h2::before {
+            content: "> ";
+            opacity: 0.6;
+        }
+
+        /* Project Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::after {
+            content: "";
+            position: absolute;
+            bottom: 0; right: 0;
+            width: 40px; height: 40px;
+            background: var(--primary-glow);
+            opacity: 0.1;
+            clip-path: polygon(100% 0, 0% 100%, 100% 100%);
+        }
+
+        .tech-tag {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: #d19bff;
+            margin-right: 10px;
+        }
+
+        /* Footer Quote */
+        footer {
+            text-align: center;
+            padding: 100px 20px 60px;
+        }
+
+        .quote-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .quote-text {
+            font-style: italic;
+            font-size: 1.2rem;
+            opacity: 0.8;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .sofia-brand {
+            font-weight: 700;
+            letter-spacing: 12px;
+            text-transform: uppercase;
+            font-size: 1.5rem;
+            color: white;
+            margin-top: 30px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 768px) {
+            .glitch-name { font-size: 3rem; }
+            .glass-panel { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="glitch-name">SOFIA</div>
+        <div class="badge">AI ENGINEERING CANDIDATE</div>
+        <p style="margin-top: 20px; opacity: 0.6; font-family: 'Fira Code';">System.Status: <span style="color: #00ffaa;">Operational</span></p>
+    </header>
+
+    <div class="glass-panel">
+        <h2>Mission Statement</h2>
+        <p>Expertly navigating the intersection of <b>Artificial Intelligence</b> and <b>Physical Robotics</b>. I specialize in developing intelligent systems using Python and Java, currently focusing on autonomous logic and interactive digital narratives.</p>
+    </div>
+
+    <div class="glass-panel">
+        <h2>Technical Arsenal</h2>
+        <div class="grid">
+            <div>
+                <h3>Core Stack</h3>
+                <p><span class="tech-tag">#Python</span> <span class="tech-tag">#Java</span> <span class="tech-tag">#C++</span></p>
+            </div>
+            <div>
+                <h3>Robotics & Dev</h3>
+                <p><span class="tech-tag">#Arduino</span> <span class="tech-tag">#RenPy</span> <span class="tech-tag">#mBlock</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass-panel">
+        <h2>Primary Operations</h2>
+        <div class="grid">
+            <div class="project-card">
+                <h3>Project "Ren"</h3>
+                <p>A complex visual novel engine built on Python, featuring dynamic decision branching and custom UI logic.</p>
+            </div>
+            <div class="project-card">
+                <h3>Robotic Prototypes</h3>
+                <p>Developing sensor-integrated autonomous systems using Arduino and C++ for real-world environmental interaction.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="quote-container">
+            <p class="quote-text">"The only way to discover the limits of the possible is to go beyond them into the impossible."</p>
+            <div style="width: 50px; height: 2px; background: var(--primary-glow); margin: 0 auto;"></div>
+            <p class="sofia-brand">SOFIA 🌙</p>
+            <p style="font-size: 0.7rem; letter-spacing: 2px; opacity: 0.4;">PURSUING THE IMPOSSIBLE • EST 2025</p>
+        </div>
+    </footer>
+</div>
+
+</body>
+</html>
