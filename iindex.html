@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sofia | Aspiring AI Engineer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap');
+
+        :root {
+            --bg: #080414;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --accent: #a371f7;
+            --accent-glow: rgba(163, 113, 247, 0.3);
+            --text-primary: #f8f9fa;
+            --text-secondary: #b1b1b1;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Decorative background blur */
+        .blur-circle {
+            position: fixed;
+            width: 400px; height: 400px;
+            background: var(--accent-glow);
+            filter: blur(100px);
+            border-radius: 50%;
+            z-index: -1;
+            top: -100px; right: -100px;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 60px 20px; }
+
+        /* Header Section */
+        header { text-align: left; margin-bottom: 100px; }
+        .hero-tag { font-family: 'Fira Code', monospace; color: var(--accent); margin-bottom: 10px; font-size: 0.9rem; }
+        h1 { font-size: 4.5rem; font-weight: 800; letter-spacing: -3px; margin-bottom: 20px; }
+        .motto { font-size: 1.5rem; color: var(--text-secondary); max-width: 600px; }
+
+        /* General Section Styling */
+        section { margin-bottom: 100px; }
+        h2 { font-size: 1.8rem; margin-bottom: 40px; display: flex; align-items: center; gap: 15px; }
+        h2::after { content: ""; height: 1px; flex: 1; background: rgba(255,255,255,0.1); }
+
+        /* Grid Layouts */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+
+        /* Certification Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.4s ease;
+        }
+        .card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 10px 30px var(--accent-glow); }
+        .card img { width: 100%; border-radius: 16px; margin-bottom: 20px; }
+        .card h3 { font-size: 1.3rem; margin-bottom: 8px; color: var(--accent); }
+        .card p { color: var(--text-secondary); font-size: 0.95rem; }
+
+        /* Tech Stack Tags */
+        .tech-container { display: flex; flex-wrap: wrap; gap: 12px; }
+        .tech-tag {
+            padding: 8px 16px;
+            background: rgba(163, 113, 247, 0.1);
+            border: 1px solid rgba(163, 113, 247, 0.2);
+            border-radius: 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--accent);
+        }
+
+        /* Experience/Education Timeline */
+        .timeline-item {
+            padding: 24px;
+            border-left: 2px solid var(--accent);
+            background: rgba(255,255,255,0.01);
+            margin-bottom: 20px;
+            border-radius: 0 16px 16px 0;
+        }
+        .timeline-date { font-size: 0.8rem; color: var(--accent); font-weight: 600; }
+
+        footer { text-align: center; padding: 40px; opacity: 0.4; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.05); }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            .motto { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="blur-circle"></div>
+
+    <div class="container">
+        <header>
+            <div class="hero-tag">Initializing portfolio.exe...</div>
+            <h1>SOFIA.</h1>
+            <p class="motto">Building high-performance solutions and <strong>pursuing the impossible</strong> in AI & Backend systems.</p>
+        </header>
+
+        <section>
+            <h2>Technical Skills</h2>
+            <div class="tech-container">
+                <span class="tech-tag">Python (Advanced)</span>
+                <span class="tech-tag">Java OOP</span>
+                <span class="tech-tag">FastAPI</span>
+                <span class="tech-tag">Machine Learning</span>
+                <span class="tech-tag">Robotics (Arduino)</span>
+                <span class="tech-tag">Ren’Py</span>
+                <span class="tech-tag">SQL</span>
+                <span class="tech-tag">Git/GitHub</span>
+            </div>
+        </section>
+
+        <section>
+            <h2>Featured Certifications</h2>
+            <div class="grid">
+                <div class="card">
+                    <img src="15900.png" alt="Java OOP">
+                    <h3>Java Object Oriented Programming</h3>
+                    <p>Comprehensive study on OOP principles, data structures, and algorithmic efficiency via Cursa.</p>
+                </div>
+                <div class="card">
+                    <img src="15899.png" alt="FastAPI">
+                    <h3>Python FastAPI Backend</h3>
+                    <p>Expertise in building asynchronous APIs, microservices, and database integration.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="grid">
+                <div>
+                    <h2>Education</h2>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2026 - PRESENT</div>
+                        <strong>High School Student (9th Grade)</strong>
+                        <p>Focusing on Mathematics, Science, and Computer Science fundamentals.</p>
+                    </div>
+                </div>
+                <div>
+                    <h2>Recent Projects</h2>
+                    <div class="timeline-item">
+                        <strong>Interactive Story Engine</strong>
+                        <p>Developed a narrative-driven project using Ren'Py with custom Python logic.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Robotic Automation</strong>
+                        <p>Designed and programmed sensor-based hardware systems using Arduino.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section style="text-align: center;">
+            <h2>Get In Touch</h2>
+            <p style="color: var(--text-secondary);">Looking for collaborations or technical discussions?</p>
+            <div style="margin-top: 30px;">
+                <a href="https://github.com/studyvlogblok89et-ops" style="color: var(--accent); text-decoration: none; font-weight: 600;">GitHub Profile →</a>
+            </div>
+        </section>
+
+        <footer>
+            &copy; 2026 Sofia | Built with HTML, CSS & Passion.
+        </footer>
+    </div>
+
+</body>
+</html>
+
