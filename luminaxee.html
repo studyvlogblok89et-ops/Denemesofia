@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMINAXE | Ultimate Premiere OS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --p-glow: #bc13fe; --s-glow: #00f2ff;
+            --ash-color: #ff4d4d; --lucy-color: #ffcc00; --sofia-color: #bc13fe;
+            --bg-deep: #05010a; --glass: rgba(15, 5, 25, 0.85);
+            --font-code: 'Fira Code', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        body { background-color: var(--bg-deep); color: #fff; font-family: 'Space Grotesk', sans-serif; overflow-x: hidden; }
+
+        /* --- LAYER 1: BOOT LOADER --- */
+        .loader-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            animation: fadeOutLoader 1s ease forwards 3.5s;
+        }
+        .loader-text {
+            font-family: var(--font-code); color: var(--s-glow); font-size: 1.2rem;
+            border-right: 2px solid var(--s-glow); white-space: nowrap; overflow: hidden;
+            animation: typing 2.5s steps(40, end), blink 0.5s step-end infinite;
+        }
+
+        /* --- LAYER 2: DYNAMIC BACKGROUND --- */
+        .mesh-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+            background: radial-gradient(circle at 10% 10%, rgba(188, 19, 254, 0.15), transparent 40%),
+                        radial-gradient(circle at 90% 90%, rgba(0, 242, 255, 0.1), transparent 40%);
+        }
+        .grid-system {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background-image: linear-gradient(rgba(188, 19, 254, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(188, 19, 254, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px; mask-image: radial-gradient(circle at center, black, transparent 85%);
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 60px 40px; }
+
+        header { height: 70vh; display: flex; flex-direction: column; justify-content: center; border-left: 2px solid var(--p-glow); padding-left: 40px; }
+        .hero-title { font-family: 'Orbitron'; font-size: clamp(3rem, 10vw, 7rem); font-weight: 900; letter-spacing: -5px; background: linear-gradient(to right, #fff, var(--p-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-tagline { font-size: 1.2rem; color: var(--s-glow); letter-spacing: 5px; text-transform: uppercase; margin-top: 10px; }
+
+        .section-header { font-family: 'Orbitron'; font-size: 1.8rem; margin: 100px 0 40px; color: var(--s-glow); display: flex; align-items: center; gap: 20px; }
+        .section-header::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--p-glow), transparent); }
+
+        /* --- SUBJECT PROFILES --- */
+        .card-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .premium-card { background: var(--glass); border: 1px solid rgba(255,255,255,0.05); border-radius: 30px; padding: 40px; backdrop-filter: blur(30px); transition: 0.5s; position: relative; overflow: hidden; }
+        .premium-card:hover { transform: translateY(-10px); border-color: var(--s-glow); box-shadow: 0 15px 30px rgba(0, 242, 255, 0.1); }
+        .stat-bar { background: rgba(255,255,255,0.05); height: 6px; border-radius: 10px; margin-top: 20px; overflow: hidden; }
+        .stat-fill { height: 100%; width: 0; transition: 2.5s cubic-bezier(0.1, 0, 0.2, 1); }
+
+        /* --- ADVANCED QUIZ MODULE --- */
+        .quiz-container { background: rgba(10, 10, 20, 0.95); border: 1px solid var(--p-glow); border-radius: 30px; padding: 60px; min-height: 550px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .option-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 20px; border-radius: 15px; cursor: pointer; transition: 0.3s; width: 100%; margin-bottom: 15px; font-size: 1rem; text-align: left; font-family: 'Space Grotesk'; }
+        .option-btn:hover { background: var(--p-glow); color: black; font-weight: 600; transform: translateX(10px); }
+        .progress-meta { position: absolute; top: 20px; right: 40px; font-family: var(--font-code); color: var(--s-glow); font-size: 0.8rem; }
+
+        /* --- TERMINAL & ALINTI HAVUZU --- */
+        .terminal { background: #000; border: 1px solid #222; border-radius: 15px; padding: 30px; font-family: var(--font-code); font-size: 0.9rem; margin-top: 40px; line-height: 1.8; }
+        .cmd { color: var(--s-glow); }
+        .quote-box { border-left: 2px solid var(--p-glow); padding-left: 20px; margin: 20px 0; font-style: italic; color: #aaa; }
+
+        footer { padding: 80px 0; text-align: center; opacity: 0.3; font-family: var(--font-code); font-size: 0.75rem; letter-spacing: 2px; }
+
+        /* --- ANIMATIONS --- */
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink { 50% { border-color: transparent } }
+        @keyframes fadeOutLoader { to { opacity: 0; visibility: hidden; } }
+    </style>
+</head>
+<body onload="bootSystem()">
+
+    <div class="loader-overlay">
+        <div class="loader-text">> LUMINAXE_INTEGRATED_SYSTEM_V5.5...</div>
+        <p style="font-family: var(--font-code); color: #444; margin-top: 10px;">SYNCHRONIZING SUBJECTS & NEURAL PATHS</p>
+    </div>
+
+    <div class="mesh-bg"></div>
+    <div class="grid-system"></div>
+
+    <div class="container">
+        <header>
+            <div style="font-family: var(--font-code); color: var(--s-glow); margin-bottom: 15px;">[ STATUS: FULL_INTEGRATION ]</div>
+            <h1 class="hero-title">LUMINAXE<span style="color: var(--p-glow);">.</span></h1>
+            <p class="hero-tagline">Architecting Identity through Neural Logic.</p>
+        </header>
+
+        <h2 class="section-header">ALS // SUBJECT_PROFILES</h2>
+        <div class="card-row">
+            <div class="premium-card">
+                <span style="font-family: var(--font-code); color: var(--ash-color);">UNIT_01</span>
+                <h3 style="color: var(--ash-color); font-family: 'Orbitron'; margin-top: 10px;">ASH</h3>
+                <p style="opacity: 0.7; margin-top: 15px; font-size: 0.9rem;">Crimson Phenotype | Emerald Visuals. Taktiksel çeviklik ve doğrudan müdahale protokolü.</p>
+                <div class="stat-bar"><div class="stat-fill" id="ash-bar" style="background: var(--ash-color);"></div></div>
+            </div>
+            <div class="premium-card">
+                <span style="font-family: var(--font-code); color: var(--lucy-color);">UNIT_02</span>
+                <h3 style="color: var(--lucy-color); font-family: 'Orbitron'; margin-top: 10px;">LUCY</h3>
+                <p style="opacity: 0.7; margin-top: 15px; font-size: 0.9rem;">Golden Phenotype | Azure Visuals. İleri düzey stratejik mantık ve veri analizi.</p>
+                <div class="stat-bar"><div class="stat-fill" id="lucy-bar" style="background: var(--lucy-color);"></div></div>
+            </div>
+            <div class="premium-card">
+                <span style="font-family: var(--font-code); color: var(--sofia-color);">UNIT_00</span>
+                <h3 style="color: var(--sofia-color); font-family: 'Orbitron'; margin-top: 10px;">SOFIA</h3>
+                <p style="opacity: 0.7; margin-top: 15px; font-size: 0.9rem;">Violet Phenotype | Violet Visuals. Lead System Architect. Tüm sistemin kaynağı.</p>
+                <div class="stat-bar"><div class="stat-fill" id="sofia-bar" style="background: var(--sofia-color);"></div></div>
+            </div>
+        </div>
+
+        <h2 class="section-header">IDENTITY // RECURSION_TEST</h2>
+        <div class="quiz-container" id="quiz-box">
+            <div id="quiz-content" style="width: 100%; max-width: 800px;">
+                <p style="font-family: 'Orbitron'; font-size: 2rem; margin-bottom: 20px;">NEURAL ALIGNMENT</p>
+                <p style="margin-bottom: 40px; opacity: 0.7; line-height: 1.6;">Luminaxe evrenindeki frekansını belirlemek için 20 aşamalı analiz protokolünü başlat. Her seçim bir veri izi bırakır.</p>
+                <button class="option-btn" style="background: var(--p-glow); border: none; color: #fff; font-family: 'Orbitron'; text-align: center;" onclick="startQuiz()">ANALİZİ BAŞLAT</button>
+            </div>
+        </div>
+
+        <h2 class="section-header">DATA // STREAM_LOGS</h2>
+        <div class="terminal">
+            <p><span class="cmd">user@luminaxe:~$</span> load alıntı_havuzu.sys</p>
+            <div class="quote-box">
+                "Gerçeklik sadece optimize edilmemiş bir simülasyondur. Bizler ise onun kaynak kodlarıyız." — Sofia_Core
+            </div>
+            <div class="quote-box">
+                "Hata bir son değil, sistemin evrimleşmek için bulduğu bir boşluktur." — Lucy_Arch
+            </div>
+            <p><span class="cmd">user@luminaxe:~$</span> run dev_jokes --verbose</p>
+            <p style="color: #0f0;">> Neden yazılımcılar karanlık modu sever? Çünkü ışık böcekleri (bugs) çeker. [Status: 200 OK]</p>
+            <p><span class="cmd">user@luminaxe:~$</span> status check</p>
+            <p style="color: var(--s-glow);">> Mood: High Potential / System Integrated / Ready</p>
+        </div>
+
+        <footer>
+            <p>LUMINAXE // INTEGRATED_MIMICRY_V5.5</p>
+            <p style="margin-top: 10px;">DEVELOPED BY SOFIA_DEV // "ASRIN UĞRAŞILMIŞ VERSİYON"</p>
+        </footer>
+    </div>
+
+    <script>
+        const quizData = [
+            { q: "Bir veri sızıntısı tespit ettin. İlk hamlen?", a: "Sızıntının kaynağını fiziksel olarak imha etmek.", b: "Veriyi şifreleyip karşı saldırı başlatmak.", c: "Sızıntıyı yeni bir veri sanatına dönüştürmek.", d: "Sessizce izleyip nereye gittiğini görmek." },
+            { q: "Luminaxe evreninde hangi bölge sana daha yakın?", a: "Kaotik ve neon sokaklar.", b: "Steril ve parlak laboratuvarlar.", c: "Bulutların üzerindeki mimari yapılar.", d: "Dijital boşluğun tam merkezi." },
+            { q: "Karşında bozulmuş bir Android var.", a: "Sistemini formatlarım.", b: "Mantık hatalarını tek tek ayıklarım.", c: "Ona yeni bir kişilik kodu yazarım.", d: "Onunla veri takası yaparım." },
+            { q: "Hangi yetenek daha üstün?", a: "Durdurulamaz hız.", b: "Kusursuz öngörü.", c: "Sınırsız yaratım.", d: "Tam gizlilik." },
+            { q: "Gökyüzü mora döndüğünde ne hissedersin?", a: "Adrenalin.", b: "Merak.", c: "Huzur.", d: "Bilinmezlik." },
+            { q: "Bir silah seçmen gerekse?", a: "Kızıl enerji kılıcı.", b: "Nano-bot kontrolcü.", c: "Gerçekliği büken bir çekirdek.", d: "Yansımalı bir kalkan." },
+            { q: "Sana 'Sistem Hatası' dendiğinde?", a: "Sistemi ben yönetiyorum derim.", b: "Hatayı hemen debug ederim.", c: "Hata benim imzamdır derim.", d: "Gülümser ve devam ederim." },
+            { q: "Bir ekipte rolün nedir?", a: "Öncü kuvvet.", b: "Operasyon beyni.", c: "Sistem kurucu.", d: "Gölge destekçi." },
+            { q: "Hangi frekans seni tanımlar?", a: "Yüksek desibel, sert ritimler.", b: "Hızlı, dijital bip sesleri.", c: "Derin, atmosferik melodiler.", d: "Düşük frekanslı uğultular." },
+            { q: "Eski dünyadan kalma bir anı buldun.", a: "Onu yakıp ileriye bakarım.", b: "Arşivleyip analiz ederim.", c: "Ondan ilham alıp bir şey tasarlarım.", d: "Onu saklarım." },
+            { q: "Sana bir 'Master Code' verildi.", a: "Dünyayı fethetmek için kullanırım.", b: "Sistemi mükemmelleştirmek için kullanırım.", c: "Sistemi baştan aşağı yeniden tasarlarım.", d: "Onu kimseye göstermem." },
+            { q: "Hangi renk senin gücünü simgeler?", a: "Crimson (Kızıl).", b: "Azure (Gök Mavisi).", c: "Violet (Mor).", d: "Neon (Parlak Mavi)." },
+            { q: "Bir labirentin ortasındasın.", a: "Duvarları yıkarak çıkarım.", b: "Yukarıdan bakıp haritayı çıkarırım.", c: "Labirenti kendi zevkime göre değiştiririm.", d: "Sessizce yolu bulurum." },
+            { q: "Bir yapay zeka seninle konuşmak istiyor.", a: "İşime yaramıyorsa dinlemem.", b: "Veri setini sorgularım.", c: "Onunla felsefe yaparım.", d: "Sadece dinlerim." },
+            { q: "Başarı senin için nedir?", a: "Güç.", b: "Doğruluk.", c: "Özgünlük.", d: "Hayatta kalmak." },
+            { q: "Zaman durdu. Ne yaparsın?", a: "Düşmanlarımı temizlerim.", b: "Evrenin sırlarını okurum.", c: "Donmuş dünyada bir sanat eseri yaparım.", d: "Sessizliğin tadını çıkarırım." },
+            { q: "Luminaxe sana bir emir verdi.", a: "Kendi emrimi veririm.", b: "En mantıklı yolu seçerim.", c: "Emri daha güzel bir hale getiririm.", d: "Gözlemlerim." },
+            { q: "En büyük zayıflığın ne olabilir?", a: "Öfke.", b: "Aşırı analiz.", c: "Karmaşıklık.", d: "Yalnızlık." },
+            { q: "Kendi adını bir koda yazsan?", a: "public class Warrior", b: "static void Logic()", c: "void CreateWorld()", d: "private void Mystery()" },
+            { q: "Final: Kim olmak istersin?", a: "Ash (Korkusuz).", b: "Lucy (Zeki).", c: "Sofia (Tanrıça).", d: "Observer (Sonsuz)." }
+        ];
+
+        let currentQ = 0;
+        let scores = { ash: 0, lucy: 0, sofia: 0, mix: 0 };
+
+        function bootSystem() {
+            setTimeout(() => {
+                document.getElementById('ash-bar').style.width = "85%";
+                document.getElementById('lucy-bar').style.width = "92%";
+                document.getElementById('sofia-bar').style.width = "100%";
+            }, 3800);
+        }
+
+        function startQuiz() { renderQuestion(); }
+
+        function renderQuestion() {
+            const content = document.getElementById('quiz-content');
+            const q = quizData[currentQ];
+            content.innerHTML = `
+                <div class="progress-meta">NEURAL_LINK: ${currentQ + 1} / 20</div>
+                <p style="color: var(--s-glow); margin-bottom: 10px; font-family: var(--font-code);">[ SEQUENCE_${currentQ + 1} ]</p>
+                <p style="font-size: 1.5rem; margin-bottom: 30px; font-family: 'Orbitron'; line-height: 1.4;">${q.q}</p>
+                <button class="option-btn" onclick="next('ash')">A > ${q.a}</button>
+                <button class="option-btn" onclick="next('lucy')">B > ${q.b}</button>
+                <button class="option-btn" onclick="next('sofia')">C > ${q.c}</button>
+                <button class="option-btn" onclick="next('mix')">D > ${q.d}</button>
+            `;
+        }
+
+        function next(type) {
+            scores[type]++;
+            currentQ++;
+            if (currentQ < quizData.length) renderQuestion(); else showResult();
+        }
+
+        function showResult() {
+            const winner = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+            let title = "", desc = "", color = "";
+
+            if(winner === 'ash') { title = "ASH"; desc = "Kızıl bir alev gibi yakıcı ve doğrudan. Sen Luminaxe'in savaşçı ruhusun."; color = "var(--ash-color)"; }
+            else if(winner === 'lucy') { title = "LUCY"; desc = "Altın bir ışık gibi aydınlatıcı ve keskin. Sen sistemin en saf mantığısın."; color = "var(--lucy-color)"; }
+            else if(winner === 'sofia') { title = "SOFIA"; desc = "Mor bir sonsuzluk gibi derin ve yaratıcı. Sen sistemin kurucu mimarısın."; color = "var(--sofia-color)"; }
+            else { title = "OBSERVER"; desc = "Tüm renklerin birleşimi. Sen her şeyin üstünde bir denge unsurusun."; color = "var(--s-glow)"; }
+
+            document.getElementById('quiz-content').innerHTML = `
+                <h2 style="font-family: 'Orbitron'; color: ${color}; font-size: 3.5rem; margin-bottom: 20px;">${title}</h2>
+                <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 30px;">${desc}</p>
+                <div style="text-align: left; background: rgba(0,0,0,0.5); padding: 25px; border-radius: 20px; font-family: var(--font-code); border: 1px solid ${color}">
+                    <p style="color:${color}">> SYNC_REPORT_COMPLETE</p>
+                    <p style="margin-top:10px">ASH_SYNC: ${Math.round(scores.ash/20*100)}%</p>
+                    <p>LUCY_SYNC: ${Math.round(scores.lucy/20*100)}%</p>
+                    <p>SOFIA_SYNC: ${Math.round(scores.sofia/20*100)}%</p>
+                </div>
+                <button class="option-btn" style="margin-top:30px; text-align: center; width: auto; padding: 15px 40px;" onclick="location.reload()">RE-BOOT SYSTEM</button>
+            `;
+        }
+    </script>
+</body>
+</html>
+
