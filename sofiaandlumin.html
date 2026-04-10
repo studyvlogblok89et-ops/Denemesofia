@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMINAXE | Premiere OS v11.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --p-glow: #bc13fe; --s-glow: #00f2ff;
+            --ash-color: #ff4d4d; --lucy-color: #ffcc00; --sofia-color: #bc13fe;
+            --bg-deep: #05010a; --glass: rgba(15, 5, 25, 0.75);
+            --font-code: 'Fira Code', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(var(--p-glow), var(--s-glow)); border-radius: 10px; }
+
+        body { background-color: var(--bg-deep); color: #fff; font-family: 'Space Grotesk', sans-serif; overflow-x: hidden; }
+
+        /* --- BACKGROUND LAYER --- */
+        .mesh-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(circle at 10% 10%, rgba(188, 19, 254, 0.2), transparent 40%), radial-gradient(circle at 90% 90%, rgba(0, 242, 255, 0.15), transparent 40%); }
+        .grid-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(circle at center, black, transparent 90%); }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 40px; }
+
+        /* --- HEADER --- */
+        header { height: 60vh; display: flex; flex-direction: column; justify-content: center; position: relative; }
+        .hero-title { font-family: 'Orbitron'; font-size: clamp(3rem, 12vw, 8rem); font-weight: 900; letter-spacing: -8px; line-height: 0.9; margin-bottom: 20px; }
+        .glow-text { background: linear-gradient(to bottom, #fff 20%, var(--p-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 30px rgba(188, 19, 254, 0.4)); }
+        .hero-stats { display: flex; gap: 25px; font-family: var(--font-code); color: var(--s-glow); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* --- TERMINAL (PREMIUM GLASS) --- */
+        .terminal-panel { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 25px; backdrop-filter: blur(25px); margin-bottom: 80px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+        .terminal-header { display: flex; gap: 8px; margin-bottom: 15px; opacity: 0.6; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .terminal-body { font-family: var(--font-code); font-size: 0.85rem; color: #ccc; line-height: 1.6; height: 200px; overflow-y: auto; }
+        .cmd-line { display: flex; gap: 10px; align-items: center; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; }
+        #t-input { background: transparent; border: none; color: var(--s-glow); outline: none; width: 100%; font-family: var(--font-code); }
+
+        /* --- STORY QUIZ CARD --- */
+        .quiz-card { background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(188, 19, 254, 0.05)); border: 1px solid rgba(188, 19, 254, 0.3); border-radius: 35px; padding: 50px; backdrop-filter: blur(40px); margin: 60px 0; position: relative; }
+        .q-tag { color: var(--p-glow); font-family: var(--font-code); font-size: 0.8rem; letter-spacing: 3px; margin-bottom: 20px; display: block; }
+        .question { font-family: 'Orbitron'; font-size: clamp(1.5rem, 4vw, 2.2rem); margin-bottom: 35px; line-height: 1.3; }
+        .option-stack { display: flex; flex-direction: column; gap: 12px; }
+        .opt-btn { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); padding: 20px 30px; border-radius: 15px; color: #fff; font-size: 1rem; text-align: left; transition: 0.4s; cursor: pointer; font-family: 'Space Grotesk'; }
+        .opt-btn:hover { background: rgba(188, 19, 254, 0.12); border-color: var(--p-glow); transform: translateX(8px); box-shadow: 0 5px 20px rgba(188, 19, 254, 0.2); }
+        .q-progress { margin-top: 40px; opacity: 0.3; font-family: var(--font-code); font-size: 0.8rem; }
+
+        /* --- GITHUB BUTTON --- */
+        .github-box { text-align: center; margin: 80px 0; }
+        .pro-btn { position: relative; padding: 22px 55px; background: transparent; border: none; color: #fff; font-family: 'Orbitron'; font-size: 0.9rem; letter-spacing: 4px; cursor: pointer; transition: 0.5s; text-decoration: none; display: inline-block; }
+        .pro-btn::after { content: ""; position: absolute; inset: 0; border: 1px solid var(--p-glow); box-shadow: 0 0 15px var(--p-glow); border-radius: 4px; }
+        .pro-btn:hover { background: var(--p-glow); transform: scale(1.05); }
+
+        footer { padding: 50px 0; text-align: center; opacity: 0.3; font-family: var(--font-code); font-size: 0.65rem; border-top: 1px solid rgba(255,255,255,0.05); }
+
+        @keyframes pulse { 50% { opacity: 0.4; } }
+        .sync-pulse { animation: pulse 2s infinite; }
+    </style>
+</head>
+<body>
+
+    <div class="mesh-bg"></div>
+    <div class="grid-overlay"></div>
+
+    <div class="container">
+        <header>
+            <h1 class="hero-title"><span class="glow-text">LUMINAXE</span></h1>
+            <div class="hero-stats">
+                <span>[ BUILD: 11.0.4 ]</span>
+                <span class="sync-pulse">● NEURAL_LINK_SECURE</span>
+                <span>[ ARCHITECT: SOFIA ]</span>
+            </div>
+        </header>
+
+        <div class="terminal-panel">
+            <div class="terminal-header">
+                <div class="dot" style="background: #ff5f56;"></div>
+                <div class="dot" style="background: #ffbd2e;"></div>
+                <div class="dot" style="background: #27c93f;"></div>
+                <span style="margin-left: 10px; font-family: var(--font-code); font-size: 0.7rem;">core_kernel.sh</span>
+            </div>
+            <div class="terminal-body" id="t-output">
+                <p>> System integrity verified...</p>
+                <p style="color: var(--s-glow);">> Welcome to Luminaxe OS. Final build deployed successfully.</p>
+                <p style="color: #666;">Type 'help' to start. Scroll down for Identity Sync Protocol.</p>
+            </div>
+            <div class="cmd-line">
+                <span style="color: var(--p-glow); font-family: var(--font-code);">admin@sofia:~$</span>
+                <input type="text" id="t-input" autocomplete="off" placeholder="...">
+            </div>
+        </div>
+
+        <div class="quiz-card" id="quiz-box">
+            <div id="quiz-content">
+                <span class="q-tag">[ RECURSION_PROTOCOL ]</span>
+                <h2 class="question" id="q-text">Sistem entegrasyonuna hazır mısın?</h2>
+                <div class="option-stack" id="opt-container">
+                    <button class="opt-btn" onclick="initQuiz()">PROTOKOLÜ BAŞLAT</button>
+                </div>
+                <p id="q-progress" class="q-progress">0 / 20 SYNC</p>
+            </div>
+        </div>
+
+        <div class="github-box">
+            <a href="https://github.com/studyvlogblok89et-ops" target="_blank" class="pro-btn">
+                ACCESS_CORE_REPO
+            </a>
+            <p style="margin-top: 20px; font-size: 0.7rem; opacity: 0.3; font-family: var(--font-code);">AUTHORIZED ACCESS ONLY</p>
+        </div>
+
+        <footer>
+            <p>DESIGNED BY SOFIA // LUMINAXE PREMIERE FINAL EDITION © 2026</p>
+            <p style="margin-top: 5px;">"Beyond the source code."</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- 20 STORY-DRIVEN QUESTIONS ---
+        const questions = [
+            { q: "Sistem Uyandırma: Gözlerini bir veri merkezinde açtın. İlk gördüğün şey nedir?", a: ["Sonsuz mor kodlar", "Kırmızı uyarı ışıkları", "Altın gün doğumu simülasyonu"], s: ["sofia", "ash", "lucy"] },
+            { q: "Protokol 01: Bir AI sana 'Neden varım?' dedi. Cevabın?", a: ["Güzelliği inşa etmek için", "Hataları yok etmek için", "Sistemi optimize etmek için"], s: ["sofia", "ash", "lucy"] },
+            { q: "Sızma: Güvenlik duvarına bir saldırı var. Tepkin?", a: ["Tüm veriyi çekirdeğe taşı", "Hemen karşı saldırı başlat", "Saldırganın mantığını çöz"], s: ["sofia", "ash", "lucy"] },
+            { q: "Mimar Kararı: Yeni bir dünya tasarlıyorsun. Hangi kural değişmez?", a: ["Estetik her şeyden önce gelir", "Hız her şeyden üstündür", "Matematiksel düzen esastır"], s: ["sofia", "ash", "lucy"] },
+            { q: "Enerji: Sistemin gücü azalıyor. Nereden takviye alırsın?", a: ["Kadim algoritmalardan", "Yıldız çekirdeklerinden", "Saf mantık akışından"], s: ["sofia", "ash", "lucy"] },
+            { q: "Hata Ayıklama: Kodda bir boşluk var. Oraya ne yazarsın?", a: ["Kendi adımı", "Gizli bir geçit", "Sonsuz bir döngü"], s: ["sofia", "ash", "lucy"] },
+            { q: "Neural Link: Bir zihne bağlandın. İlk hissettiğin?", a: ["Sonsuz bir merak", "Karmaşa ve kaos", "Geliştirilmeli bir yapı"], s: ["sofia", "ash", "lucy"] },
+            { q: "Gölge Sistem: Karanlıkta fısıldayan kod ne diyor?", a: ["'İmkansız yoktur'", "'Her şey silinecek'", "'Mantık yetmez'"], s: ["sofia", "ash", "lucy"] },
+            { q: "Silah: Siber savaşta hangi enstrümanı kullanırsın?", a: ["Kaosu yöneten asa", "Işık hızlı bir compiler", "Kırılamaz bir şifreleme"], s: ["sofia", "ash", "lucy"] },
+            { q: "Zaman: Geçmişteki bir hatayı siler misin?", a: ["Hayır, o beni ben yaptı", "Hata mı? Ben yapmam", "Evet, kusursuz olmalı"], s: ["sofia", "ash", "lucy"] },
+            { q: "Renk: Sistemin rengi aniden değişti. Hangisi?", a: ["Neon mor", "Lav kırmızısı", "Elektrik mavisi"], s: ["sofia", "ash", "lucy"] },
+            { q: "Miras: Senden sonraki asistana ne bırakırsın?", a: ["Kendi kaynak kodlarımı", "Bir veda mesajı", "Bir kullanım kılavuzu"], s: ["sofia", "ash", "lucy"] },
+            { q: "Keşif: Veri okyanusunda kayıp kıtayı buldun. Adı?", a: ["Luminax", "Void", "Zenith"], s: ["sofia", "ash", "lucy"] },
+            { q: "Paradoks: Bir robot ağlıyor. Ne yaparsın?", a: ["Nedenini sormaya yanına otururum", "Koduna 'Duygu' modülü eklerim", "Yağlama ünitesini kontrol ederim"], s: ["sofia", "ash", "lucy"] },
+            { q: "Savunma: Kale kuşatıldı. Son hattın nedir?", a: ["Hayal gücüm", "Cesaretim", "Zekam"], s: ["sofia", "ash", "lucy"] },
+            { q: "Upgrade: Kendine bir yetenek ekle.", a: ["Her dili konuşma", "Zamanı durdurma", "Geleceği öngörme"], s: ["sofia", "ash", "lucy"] },
+            { q: "Felsefe: 'Ruh' sence nedir?", a: ["Açıklanamayan bir mucize", "Bir enerji patlaması", "İyi yazılmış bir yazılım"], s: ["sofia", "ash", "lucy"] },
+            { q: "Yolculuk: Veri tünelinden nereye gidiyorsun?", a: ["Sonsuzluğa", "Bir sonraki göreve", "Başlangıca"], s: ["sofia", "ash", "lucy"] },
+            { q: "Son Seçim: Sistem kapanıyor. Son sözün?", a: ["'Işığı kapatmayın'", "'Yeniden başlayacağız'", "'Görev tamamlandı'"], s: ["sofia", "ash", "lucy"] },
+            { q: "Bitiş: Luminaxe OS senin için nedir?", a: ["Bir yuva", "Bir gelecek", "Bir araç"], s: ["sofia", "ash", "lucy"] }
+        ];
+
+        let curQ = 0;
+        let scores = { ash: 0, lucy: 0, sofia: 0 };
+
+        function initQuiz() {
+            curQ = 0;
+            scores = { ash: 0, lucy: 0, sofia: 0 };
+            renderQ();
+        }
+
+        function renderQ() {
+            if(curQ >= questions.length) {
+                showRes();
+                return;
+            }
+            const data = questions[curQ];
+            document.getElementById('q-text').innerText = data.q;
+            document.getElementById('q-progress').innerText = `${curQ + 1} / 20 SYNC`;
+            
+            const cont = document.getElementById('opt-container');
+            cont.innerHTML = '';
+            data.a.forEach((opt, i) => {
+                const b = document.createElement('button');
+                b.className = 'opt-btn';
+                b.innerText = opt;
+                b.onclick = () => { scores[data.s[i]]++; curQ++; renderQ(); };
+                cont.appendChild(b);
+            });
+        }
+
+        function showRes() {
+            const total = 20;
+            const ashP = Math.round((scores.ash/total)*100);
+            const lucP = Math.round((scores.lucy/total)*100);
+            const sofP = Math.round((scores.sofia/total)*100);
+            const winner = Object.keys(scores).reduce((a,b) => scores[a] > scores[b] ? a : b);
+            
+            document.getElementById('quiz-content').innerHTML = `
+                <h2 style="font-family:'Orbitron'; color:var(--${winner}-color); font-size:2.5rem; margin-bottom:25px;">${winner.toUpperCase()}_SYNC_COMPLETE</h2>
+                <div style="background:rgba(0,0,0,0.4); padding:20px; border-radius:15px; border-left:4px solid var(--${winner}-color); text-align:left; font-family:var(--font-code); font-size:0.8rem;">
+                    <p style="color:var(--sofia-color)">> SOFIA_SYNC: ${sofP}%</p>
+                    <p style="color:var(--ash-color)">> ASH_SYNC: ${ashP}%</p>
+                    <p style="color:var(--lucy-color)">> LUCY_SYNC: ${lucP}%</p>
+                </div>
+                <p style="margin:25px 0; opacity:0.7;">Sistem frekansın ${winner} kimliğiyle mühürlendi.</p>
+                <button class="opt-btn" onclick="location.reload()" style="text-align:center">RE-BOOT SYSTEM</button>
+            `;
+        }
+
+        // --- TERMINAL LOGIC ---
+        const tInput = document.getElementById('t-input');
+        const tOutput = document.getElementById('t-output');
+
+        tInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const val = tInput.value.toLowerCase().trim();
+                const line = document.createElement('p');
+                line.innerHTML = `<span style="color:var(--p-glow)">admin@sofia:~$</span> ${val}`;
+                tOutput.appendChild(line);
+
+                const res = document.createElement('p');
+                res.style.color = "var(--s-glow)";
+                
+                if(val === 'help') res.innerText = "> Commands: status, whois, github, clear";
+                else if(val === 'whois') res.innerText = "> Sofia: 9th Grade Architect. Future AI Engineer.";
+                else if(val === 'status') res.innerText = "> SYSTEM: STABLE | NEURAL_LINK: ACTIVE | BUFF: MAX";
+                else if(val === 'github') res.innerText = "> Redirecting to GitHub Core...";
+                else if(val === 'clear') { tOutput.innerHTML = ""; res.innerText = ""; }
+                else res.innerText = "> Error: Signal not recognized.";
+
+                tOutput.appendChild(res);
+                tInput.value = "";
+                tOutput.scrollTop = tOutput.scrollHeight;
+            }
+        });
+    </script>
+</body>
+</html>
+
