@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOFIA | Systems Architect & AI Pioneer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --p-glow: #bc13fe; 
+            --s-glow: #00f2ff;
+            --bg-deep: #05010a;
+            --glass: rgba(15, 5, 25, 0.7);
+            --border: rgba(188, 19, 254, 0.2);
+            --font-main: 'Space Grotesk', sans-serif;
+            --font-code: 'Fira Code', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--p-glow); border-radius: 10px; }
+
+        body {
+            background-color: var(--bg-deep);
+            color: #fff;
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* LAYER 1: DYNAMIC BACKGROUND */
+        .mesh-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            background: 
+                radial-gradient(circle at 10% 10%, rgba(188, 19, 254, 0.12), transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(0, 242, 255, 0.08), transparent 40%);
+        }
+
+        .grid-system {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(188, 19, 254, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(188, 19, 254, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: -1;
+            mask-image: radial-gradient(circle at center, black, transparent 80%);
+        }
+
+        /* LAYER 2: BOOT LOADER */
+        .loader-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            animation: fadeOutLoader 1s ease forwards 2.5s;
+        }
+
+        .loader-text {
+            font-family: var(--font-code);
+            color: var(--s-glow);
+            font-size: 1rem;
+            border-right: 2px solid var(--s-glow);
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 2s steps(30, end), blink 0.5s step-end infinite;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+        /* LAYER 3: HERO SECTION */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3.5rem, 12vw, 8.5rem);
+            font-weight: 900;
+            line-height: 0.85;
+            letter-spacing: -6px;
+            background: linear-gradient(to bottom, #fff 40%, var(--p-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .hero-tagline {
+            font-size: 1.2rem;
+            opacity: 0.6;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-weight: 300;
+            color: var(--s-glow);
+        }
+
+        /* LAYER 4: DATA PANELS */
+        .section-title {
+            font-family: 'Orbitron';
+            font-size: 1.6rem;
+            margin: 120px 0 50px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: var(--s-glow);
+            letter-spacing: 3px;
+        }
+
+        .section-title::before { content: "HEX_"; font-size: 0.8rem; color: var(--p-glow); }
+        .section-title::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
+
+        .glass-panel {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 50px;
+            backdrop-filter: blur(30px);
+            transition: 0.5s;
+        }
+
+        /* TECH STACK */
+        .stack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .stack-item {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(188, 19, 254, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            font-family: var(--font-code);
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+
+        .stack-item:hover {
+            border-color: var(--s-glow);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 242, 255, 0.1);
+            color: var(--s-glow);
+        }
+
+        /* PROJECT CARDS */
+        .card-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+
+        .zenith-card {
+            background: rgba(255,255,255,0.01);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 25px;
+            padding: 30px;
+            transition: 0.5s;
+        }
+
+        .zenith-card:hover {
+            border-color: var(--p-glow);
+            background: rgba(188, 19, 254, 0.03);
+            transform: translateY(-10px);
+        }
+
+        .zenith-card img {
+            width: 100%; border-radius: 15px; margin-bottom: 20px;
+            filter: grayscale(1) brightness(0.7); transition: 0.5s;
+        }
+
+        .zenith-card:hover img { filter: grayscale(0) brightness(1.1); }
+
+        /* GITHUB BUTTON */
+        .github-zone { text-align: center; margin: 150px 0; }
+
+        .pro-github-btn {
+            position: relative;
+            padding: 22px 60px;
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Orbitron';
+            font-weight: 700;
+            letter-spacing: 5px;
+            border: 1px solid var(--s-glow);
+            transition: 0.5s;
+            display: inline-block;
+        }
+
+        .pro-github-btn:hover {
+            box-shadow: 0 0 40px var(--s-glow);
+            background: var(--s-glow);
+            color: #000;
+        }
+
+        footer {
+            padding: 60px 0; text-align: center;
+            font-family: var(--font-code);
+            opacity: 0.3; font-size: 0.7rem; letter-spacing: 2px;
+        }
+
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink { 50% { border-color: transparent } }
+        @keyframes fadeOutLoader { to { opacity: 0; visibility: hidden; } }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 3.8rem; letter-spacing: -2px; }
+            .card-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="loader-overlay">
+        <div class="loader-text">> BOOTING SOFIA_OS_V5.0...</div>
+    </div>
+
+    <div class="mesh-bg"></div>
+    <div class="grid-system"></div>
+
+    <div class="container">
+        
+        <header>
+            <div style="font-family: var(--font-code); color: var(--s-glow); margin-bottom: 15px;">[ STATUS: OPERATIONAL ]</div>
+            <h1 class="hero-title">SOFIA<span style="color: var(--p-glow);">.</span></h1>
+            <p class="hero-tagline">Architecting the future through Neural Logic.</p>
+        </header>
+
+        <div class="glass-panel">
+            <h2 style="font-family: 'Orbitron'; margin-bottom: 20px; color: var(--p-glow);">Mission Brief</h2>
+            <p style="font-size: 1.2rem; font-weight: 300; line-height: 1.8; opacity: 0.9;">
+                Currently a 9th-grade student and an aspiring **AI Engineer**. My focus lies in the intersection of 
+                **Backend Architectures** (FastAPI/Java) and **Autonomous Hardware** (Robotics). 
+                I build systems that bridge the gap between high-level software logic and real-world physical interaction.
+            </p>
+        </div>
+
+        <h2 class="section-title">Technological Stack</h2>
+        <div class="stack-grid">
+            <div class="stack-item">PYTHON 3.12</div>
+            <div class="stack-item">JAVA OOP</div>
+            <div class="stack-item">FASTAPI</div>
+            <div class="stack-item">C++ / ARDUINO</div>
+            <div class="stack-item">ROBOTICS (mBlock)</div>
+            <div class="stack-item">REN'PY LOGIC</div>
+            <div class="stack-item">SQL DATABASE</div>
+            <div class="stack-item">AI FOUNDATIONS</div>
+        </div>
+
+        <h2 class="section-title">Verified Expertise</h2>
+        <div class="card-row">
+            <div class="zenith-card">
+                <img src="15900.png" alt="Java Mastery">
+                <h3 style="font-family: 'Orbitron'; color: var(--s-glow);">Java Systems</h3>
+                <p style="opacity: 0.6; margin-top: 10px;">Advanced Object-Oriented Programming, design patterns, and algorithmic efficiency. (Kunal Kushwaha / Cursa)</p>
+            </div>
+            <div class="zenith-card">
+                <img src="15899.png" alt="FastAPI Mastery">
+                <h3 style="font-family: 'Orbitron'; color: var(--p-glow);">Backend Systems</h3>
+                <p style="opacity: 0.6; margin-top: 10px;">High-performance asynchronous API architecture and scalable microservices. (Turtle Code / Cursa)</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">Current Operations</h2>
+        <div class="card-row">
+            <div class="zenith-card">
+                <span style="font-family: var(--font-code); color: var(--p-glow);">[ PROJ_01 ]</span>
+                <h3 style="margin: 15px 0;">Project "REN"</h3>
+                <p style="opacity: 0.7;">A complex narrative-driven engine built on Python, featuring dynamic decision branching and custom UI logic.</p>
+            </div>
+            <div class="zenith-card">
+                <span style="font-family: var(--font-code); color: var(--s-glow);">[ PROJ_02 ]</span>
+                <h3 style="margin: 15px 0;">Robotic Automation</h3>
+                <p style="opacity: 0.7;">Developing sensor-integrated autonomous systems using Arduino and C++ for environmental interaction.</p>
+            </div>
+        </div>
+
+        <div class="github-zone">
+            <p style="margin-bottom: 25px; font-family: var(--font-code); opacity: 0.5;">READY TO INSPECT THE CORE?</p>
+            <a href="https://github.com/studyvlogblok89et-ops" target="_blank" class="pro-github-btn">
+                ACCESS_REPOSITORY
+            </a>
+        </div>
+
+        <footer>
+            <p>SOFIA // CORE_SYSTEM_V5.0</p>
+            <p style="margin-top: 10px; opacity: 0.5;">"In pursuit of the impossible." 🌙 © 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            document.querySelector('.mesh-bg').style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+    </script>
+
+</body>
+</html>
+
