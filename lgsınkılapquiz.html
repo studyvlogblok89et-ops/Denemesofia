@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LGS 30 SORU // DÜELLO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --p1-color: #00f2ff; --p2-color: #bc13fe;
+            --bg: #05010a; --correct: #00ff88; --wrong: #ff4d4d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #fff; font-family: 'Space Grotesk', sans-serif; height: 100vh; overflow: hidden; }
+
+        #setup {
+            position: fixed; inset: 0; background: var(--bg); z-index: 100;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;
+        }
+        input { 
+            width: 85%; padding: 15px; margin: 10px; background: rgba(255,255,255,0.05); 
+            border: 1px solid var(--p1-color); color: #fff; border-radius: 10px; text-align: center; outline: none;
+        }
+        #start-btn { 
+            background: var(--p1-color); color: #000; border: none; padding: 15px 50px; 
+            border-radius: 30px; font-family: 'Orbitron'; font-weight: bold; margin-top: 20px;
+        }
+
+        .game-container { display: flex; flex-direction: column; height: 100vh; }
+        
+        .player-zone { 
+            flex: 1; display: flex; flex-direction: column; justify-content: center; 
+            padding: 15px; position: relative; border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .p1-zone { transform: rotate(180deg); border-bottom: 2px solid var(--p1-color); }
+        .p2-zone { border-top: 2px solid var(--p2-color); }
+
+        .stats { display: flex; justify-content: space-between; font-family: 'Orbitron'; font-size: 0.65rem; margin-bottom: 5px; }
+        .q-text { font-size: 0.8rem; line-height: 1.25; margin-bottom: 8px; text-align: justify; color: #ccc; }
+        .q-bold { color: #fff; font-weight: bold; display: block; margin-top: 3px; }
+
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+        .mobile-opt { 
+            background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+            color: #fff; padding: 8px 4px; border-radius: 6px; font-size: 0.7rem; text-align: center;
+            display: flex; align-items: center; justify-content: center; min-height: 40px;
+        }
+
+        .correct { background: var(--correct) !important; color: #000 !important; font-weight: bold; }
+        .wrong { background: var(--wrong) !important; }
+
+        .timer-line { position: absolute; bottom: 0; left: 0; height: 3px; background: #00f2ff; width: 100%; transition: linear 1s; }
+
+        #result { 
+            position: fixed; inset: 0; background: var(--bg); z-index: 200; display: none;
+            flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="setup">
+        <h2 style="font-family: 'Orbitron'; color: var(--p1-color); margin-bottom: 5px;">LGS 30 MARATONU</h2>
+        <p style="font-size: 0.75rem; color: #888; margin-bottom: 15px;">30 Yeni Nesil Soru // 15 Saniye Süre</p>
+        <input type="text" id="p1-in" placeholder="1. Oyuncu">
+        <input type="text" id="p2-in" placeholder="2. Oyuncu">
+        <button id="start-btn" onclick="initGame()">MARATONU BAŞLAT</button>
+    </div>
+
+    <div class="game-container">
+        <div class="player-zone p1-zone" id="p1-area">
+            <div class="stats"><span id="p1-name-tag">P1</span> <span id="p1-score">0</span> <span id="p1-prog">1/30</span></div>
+            <div class="q-text" id="q1-text">...</div>
+            <div class="btn-grid" id="p1-btns"></div>
+            <div class="timer-line" id="t1"></div>
+        </div>
+
+        <div class="player-zone p2-zone" id="p2-area">
+            <div class="stats"><span id="p2-name-tag">P2</span> <span id="p2-score">0</span> <span id="p2-prog">1/30</span></div>
+            <div class="q-text" id="q2-text">...</div>
+            <div class="btn-grid" id="p2-btns"></div>
+            <div class="timer-line" id="t2"></div>
+        </div>
+    </div>
+
+    <div id="result">
+        <h1 id="win-msg" style="font-family: 'Orbitron'; font-size: 1.5rem; margin-bottom: 15px;"></h1>
+        <p id="final-scores" style="font-size: 1.1rem; line-height: 1.6;"></p>
+        <button id="start-btn" onclick="location.reload()">YENİDEN BAŞLA</button>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "Selanik'in çok uluslu yapısı, farklı dillerde gazetelerin basılması Mustafa Kemal'in hangi yönünü etkilemiştir? <span class='q-bold'>Zengin bir kültürün oluşması neyi sağlar?</span>", a: ["Askeri Deha", "Fikir Hayatı", "Fiziksel Güç", "Dini İnanç"], c: 1 },
+            { q: "Mustafa Kemal'in Manastır Askeri İdadisi'nde tarih öğretmeni sayesinde tarihe ilgi duyması onun hangi yönünü geliştirmiştir? <span class='q-bold'>Bu durum neyin habercisidir?</span>", a: ["Silah Uzmanlığı", "Milli Bilinç", "Ekonomik Bilgi", "Sanat Tutkusu"], c: 1 },
+            { q: "Meşrutiyet'e karşı çıkan 31 Mart Vakası'nı bastıran Hareket Ordusu'nda görev alması neyi savunduğunu kanıtlar? <span class='q-bold'>Hedef nedir?</span>", a: ["Padişahlığı", "Yenilikleri", "Dini Yönetimi", "Sömürgeciliği"], c: 1 },
+            { q: "İtalyanların Trablusgarp'ı işgaline karşı gizlice gidip halkı örgütlemesi hangi özelliğiyle ilgilidir? <span class='q-bold'>Halkı birleştirmek nedir?</span>", a: ["Teşkilatçılık", "Barışçılık", "Edebiyat", "Diplomasi"], c: 0 },
+            { q: "Mondros Ateşkesi'nin 7. maddesi (Güvenliği tehdit eden yerleri işgal) neyin hukuki zeminidir? <span class='q-bold'>İtilaf devletleri neyi amaçlamıştır?</span>", a: ["Barış Yapmayı", "İşgalleri", "Ekonomik Yardımı", "Eğitimi"], c: 1 },
+            { q: "Kuvay-ı Milliye birliklerinin merkezi otoriteden bağımsız hareket etmesi hangi ihtiyacı doğurmuştur? <span class='q-bold'>Eksik olan nedir?</span>", a: ["Düzenli Ordu", "Yeni Anayasa", "Meclis Açılması", "Barış Görüşmesi"], c: 0 },
+            { q: "Sivas Kongresi'nde tüm cemiyetlerin 'Anadolu ve Rumeli Müdafaa-i Hukuk Cemiyeti' altında birleşme sebebi? <span class='q-bold'>Amaç nedir?</span>", a: ["Siyasi Parti Kurmak", "Tek Elden Yönetim", "Sınırları Çizmek", "Halifeyi Korumak"], c: 1 },
+            { q: "Misak-ı Milli'de 'Siyasi, adli ve mali gelişmemizi engelleyen sınırlamalar kaldırılmalıdır' maddesi neye tepkidir? <span class='q-bold'>Kısıtlama nedir?</span>", a: ["Azınlıklara", "Kapitülasyonlara", "Dış Borçlara", "Manda Sistemine"], c: 1 },
+            { q: "Büyük Millet Meclisi'ne karşı çıkan ayaklanmaları bastırmak için çıkarılan kanun hangisidir? <span class='q-bold'>Yasal önlem nedir?</span>", a: ["Teşkilat-ı Esasiye", "Hıyanet-i Vataniye", "Tekalif-i Milliye", "Takrir-i Sükun"], c: 1 },
+            { q: "Gümrü Antlaşması ile Ermenilerin iddialarından vazgeçmesi TBMM'ye ne kazandırmıştır? <span class='q-bold'>Siyasi sonuç nedir?</span>", a: ["İlk Siyasi Zafer", "Dünya Savaşı Sonu", "İstanbul'un Fethi", "Deniz Hakimiyeti"], c: 0 },
+            { q: "I. İnönü Zaferi sonrası Londra Konferansı'na TBMM'nin davet edilmesi neyin göstergesidir? <span class='q-bold'>Diplomatik başarı nedir?</span>", a: ["Savaşın Bittiği", "TBMM'nin Tanındığı", "Boğazların Alındığı", "İngiliz Desteği"], c: 1 },
+            { q: "Kütahya-Eskişehir Savaşları devam ederken Maarif Kongresi'nin toplanması neye verilen önemi gösterir? <span class='q-bold'>Savaşta bile ne önceliklidir?</span>", a: ["Sanayi", "Eğitim", "Tarım", "Turizm"], c: 1 },
+            { q: "Sakarya Savaşı öncesi Tekalif-i Milliye Emirleri'nin yayınlanma amacı nedir? <span class='q-bold'>Lojistik destek kime sağlanır?</span>", a: ["Halka Yardım", "Ordunun İhtiyacı", "Okul İnşası", "Yol Yapımı"], c: 1 },
+            { q: "Sakarya Meydan Muharebesi'nin kazanılmasıyla Fransızlarla imzalanan antlaşma hangisidir? <span class='q-bold'>Güney cephesi nasıl kapandı?</span>", a: ["Moskova", "Ankara", "Mudanya", "Lozan"], c: 1 },
+            { q: "Lozan'da Boğazlar için bir komisyon kurulması neye aykırıdır? <span class='q-bold'>Eksik kalan nedir?</span>", a: ["Barışa", "Tam Bağımsızlığa", "Dostluğa", "Eğitme"], c: 1 },
+            { q: "Saltanatın kaldırılmasıyla yönetimde yaşanan hangi belirsizlik ortaya çıkmıştır? <span class='q-bold'>Koltuk boş kalınca ne olur?</span>", a: ["Ekonomik Kriz", "Devlet Başkanlığı", "Sınır Güvenliği", "Okul Sorunu"], c: 1 },
+            { q: "Cumhuriyetin ilanıyla (29 Ekim 1923) hangi sistemden 'Kabine Sistemi'ne geçilmiştir? <span class='q-bold'>Hükümet nasıl kurulur?</span>", a: ["Meclis Hükümeti", "Mutlakiyet", "Oligarşi", "Teokrasi"], c: 0 },
+            { q: "Halifeliğin kaldırılması hangi Atatürk ilkesiyle en çok ilişkilidir? <span class='q-bold'>Din ve devlet ayrımı nedir?</span>", a: ["Halkçılık", "Laiklik", "Devletçilik", "Milliyetçilik"], c: 1 },
+            { q: "Tevhid-i Tedrisat Kanunu ile tüm okulların MEB'e bağlanması neyi sağlamıştır? <span class='q-bold'>Okullarda ne oluşur?</span>", a: ["Sayıca Artış", "Eğitimde Birlik", "Ücretsiz Kitap", "Spor Eğitimi"], c: 1 },
+            { q: "Şapka İnkılabı ve Kılık Kıyafet düzenlemesinin toplumsal amacı nedir? <span class='q-bold'>Görünüşte ne istenir?</span>", a: ["Mali Tasarruf", "Modernleşme", "Sınıf Ayrımı", "Dini Baskı"], c: 1 },
+            { q: "Medeni Kanun ile kadına verilen 'İstediği mesleğe girme' hakkı hangi alanla ilgilidir? <span class='q-bold'>İş hayatı nedir?</span>", a: ["Siyasi", "Ekonomik-Sosyal", "Askeri", "Hukuki"], c: 1 },
+            { q: "Kabotaj Kanunu ile Türk karasularında gemi işletme hakkının Türklere verilmesi? <span class='q-bold'>Denizlerde ne sağlandı?</span>", a: ["Halkçılık", "Milliyetçilik", "Laiklik", "Devletçilik"], c: 1 },
+            { q: "1929 Dünya Ekonomik Bunalımı sonrası Türkiye'de hangi ilke zorunlu olarak uygulanmıştır? <span class='q-bold'>Devlet yatırım yaparsa?</span>", a: ["Laiklik", "Devletçilik", "Cumhuriyetçilik", "Halkçılık"], c: 1 },
+            { q: "Soyadı Kanunu'nun çıkarılmasıyla toplumdaki unvanların (Paşa, Hacı vb.) yasaklanması? <span class='q-bold'>Eşitlik nedir?</span>", a: ["Devletçilik", "Halkçılık", "Milliyetçilik", "Laiklik"], c: 1 },
+            { q: "Anayasa'dan 'Devletin dini İslam'dır' ibaresinin çıkarılması (1928) hangi adım içindir? <span class='q-bold'>Tam olarak ne sağlandı?</span>", a: ["Cumhuriyetçilik", "Laiklik", "Halkçılık", "Milliyetçilik"], c: 1 },
+            { q: "Atatürk'ün 'Yurtta Sulh, Cihanda Sulh' sözü dış politikada neyi temel alır? <span class='q-bold'>Sulh nedir?</span>", a: ["Savaşı", "Barışı", "Yayılmacılığı", "Sömürgeyi"], c: 1 },
+            { q: "Türkiye'nin Milletler Cemiyeti'ne üye olması (1932) neyi kanıtlar? <span class='q-bold'>Dünya barışına ne verdi?</span>", a: ["Gücünü", "Barışçıl Olduğunu", "Zenginliğini", "Yalnızlığını"], c: 1 },
+            { q: "Montrö Boğazlar Sözleşmesi ile Boğazlar Komisyonu'nun kalkması neyi güçlendirmiştir? <span class='q-bold'>Boğazlarda ne oldu?</span>", a: ["Turizmi", "Tam Bağımsızlığı", "Balıkçılığı", "Eğitimi"], c: 1 },
+            { q: "Hatay'ın ana vatana katılması Atatürk'ün hangi özelliğini ve politikasını gösterir? <span class='q-bold'>Toprak sevgisi nedir?</span>", a: ["Vatanseverlik", "Ekonomistlik", "Sanatçılık", "Hukukçuluk"], c: 0 },
+            { q: "Atatürk'ün 'Benim naçiz vücudum bir gün toprak olacaktır ama Türkiye Cumhuriyeti ilelebet payidar kalacaktır' sözü neyi vurgular? <span class='q-bold'>Kalıcı olan nedir?</span>", a: ["Kendi Gücünü", "Cumhuriyetin Sürekliliğini", "Ölüm Korkusunu", "Savaşları"], c: 1 }
+        ];
+
+        let cur = 0, s1 = 0, s2 = 0, canHit = false, timer;
+
+        function initGame() {
+            const p1 = document.getElementById('p1-in').value || "OYUNCU 1";
+            const p2 = document.getElementById('p2-in').value || "OYUNCU 2";
+            document.getElementById('p1-name-tag').innerText = p1;
+            document.getElementById('p2-name-tag').innerText = p2;
+            document.getElementById('setup').style.display = 'none';
+            render();
+        }
+
+        function render() {
+            if(cur >= questions.length) return finish();
+            canHit = true;
+            const q = questions[cur];
+            
+            document.getElementById('q1-text').innerHTML = q.q;
+            document.getElementById('q2-text').innerHTML = q.q;
+            document.getElementById('p1-prog').innerText = `${cur+1}/30`;
+            document.getElementById('p2-prog').innerText = `${cur+1}/30`;
+            
+            [1, 2].forEach(pNum => {
+                const box = document.getElementById(`p${pNum}-btns`);
+                box.innerHTML = '';
+                q.a.forEach((opt, i) => {
+                    const b = document.createElement('div');
+                    b.className = 'mobile-opt';
+                    b.innerText = opt;
+                    b.onclick = () => check(pNum, i);
+                    box.appendChild(b);
+                });
+            });
+            startTimer();
+        }
+
+        function startTimer() {
+            let sec = 15;
+            clearInterval(timer);
+            timer = setInterval(() => {
+                sec--;
+                const w = (sec/15)*100 + "%";
+                document.getElementById('t1').style.width = w;
+                document.getElementById('t2').style.width = w;
+                if(sec <= 0) { next(); }
+            }, 1000);
+        }
+
+        function check(p, idx) {
+            if(!canHit) return;
+            canHit = false;
+            clearInterval(timer);
+            const correct = questions[cur].c;
+            
+            if(idx === correct) {
+                document.getElementById(`p1-btns`).children[idx].classList.add('correct');
+                document.getElementById(`p2-btns`).children[idx].classList.add('correct');
+                if(p === 1) s1 += 10; else s2 += 10;
+            } else {
+                document.getElementById(`p${p}-btns`).children[idx].classList.add('wrong');
+                document.getElementById(`p1-btns`).children[correct].classList.add('correct');
+                document.getElementById(`p2-btns`).children[correct].classList.add('correct');
+            }
+            
+            document.getElementById('p1-score').innerText = s1;
+            document.getElementById('p2-score').innerText = s2;
+            setTimeout(next, 1500);
+        }
+
+        function next() {
+            cur++;
+            render();
+        }
+
+        function finish() {
+            document.getElementById('result').style.display = 'flex';
+            const winner = s1 > s2 ? document.getElementById('p1-name-tag').innerText : (s2 > s1 ? document.getElementById('p2-name-tag').innerText : "BERABERE");
+            document.getElementById('win-msg').innerText = "KUPA KAZANANI: " + winner;
+            document.getElementById('final-scores').innerText = `TOPLAM PUAN<br>${document.getElementById('p1-name-tag').innerText}: ${s1}<br>${document.getElementById('p2-name-tag').innerText}: ${s2}`;
+        }
+    </script>
+</body>
+</html>
+
