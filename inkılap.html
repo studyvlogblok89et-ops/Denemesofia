@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMINAXE | Sofia.dev History Module</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --p-glow: #bc13fe; --s-glow: #00f2ff;
+            --sofia-color: #bc13fe;
+            --bg-deep: #05010a; --glass: rgba(15, 5, 25, 0.9);
+            --font-code: 'Fira Code', monospace;
+            --correct: #00ff88; --wrong: #ff4d4d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        body { background-color: var(--bg-deep); color: #fff; font-family: 'Space Grotesk', sans-serif; overflow: hidden; height: 100vh; }
+
+        /* --- BACKGROUND ANIMATION --- */
+        .mesh-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+            background: radial-gradient(circle at 10% 10%, rgba(188, 19, 254, 0.2), transparent 45%),
+                        radial-gradient(circle at 90% 90%, rgba(0, 242, 255, 0.15), transparent 45%);
+        }
+        .grid-system {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background-image: linear-gradient(rgba(188, 19, 254, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(188, 19, 254, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px; mask-image: radial-gradient(circle at center, black, transparent 90%);
+        }
+
+        /* --- MAIN CONTAINER --- */
+        .container { 
+            max-width: 900px; margin: 0 auto; height: 100vh; 
+            display: flex; flex-direction: column; justify-content: center; padding: 20px;
+        }
+
+        .quiz-card {
+            background: var(--glass); border: 1px solid rgba(188, 19, 254, 0.4);
+            border-radius: 30px; padding: 50px; backdrop-filter: blur(25px);
+            box-shadow: 0 0 50px rgba(188, 19, 254, 0.2); position: relative;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- HEADER & PROGRESS --- */
+        .header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; }
+        .system-id { font-family: var(--font-code); color: var(--p-glow); font-weight: bold; font-size: 0.9rem; }
+        .progress-circle { font-family: 'Orbitron'; font-size: 1.2rem; color: var(--s-glow); }
+
+        .progress-bar { height: 2px; background: rgba(255,255,255,0.05); margin-bottom: 40px; position: relative; }
+        .progress-fill { height: 100%; width: 0%; background: var(--p-glow); box-shadow: 0 0 15px var(--p-glow); transition: 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+
+        /* --- CONTENT --- */
+        .question-area { min-height: 300px; }
+        .tag { font-family: var(--font-code); color: rgba(255,255,255,0.3); font-size: 0.7rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
+        .question-text { font-family: 'Orbitron'; font-size: 1.6rem; line-height: 1.4; margin-bottom: 40px; font-weight: 700; color: #fff; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .option-btn {
+            background: rgba(188, 19, 254, 0.02); border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.8); padding: 20px; border-radius: 15px; text-align: left;
+            font-size: 1rem; transition: 0.3s; font-family: 'Space Grotesk';
+        }
+        .option-btn:hover { border-color: var(--p-glow); background: rgba(188, 19, 254, 0.1); transform: translateY(-3px); color: #fff; }
+        .option-btn.correct { background: rgba(0, 255, 136, 0.15) !important; border-color: var(--correct) !important; color: var(--correct); box-shadow: 0 0 20px rgba(0, 255, 136, 0.2); }
+        .option-btn.wrong { background: rgba(255, 77, 77, 0.15) !important; border-color: var(--wrong) !important; color: var(--wrong); }
+
+        /* --- TERMINAL FEEDBACK --- */
+        .terminal {
+            margin-top: 30px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 12px;
+            font-family: var(--font-code); font-size: 0.85rem; border-left: 3px solid var(--s-glow);
+            display: none; animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+
+        /* --- RESULT SCREEN --- */
+        .result-screen { text-align: center; display: none; }
+        .sofia-brand { font-family: 'Orbitron'; font-size: 3.5rem; font-weight: 900; background: linear-gradient(45deg, var(--p-glow), var(--s-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
+        .final-quote { font-style: italic; color: var(--s-glow); margin: 30px 0; font-size: 1.3rem; line-height: 1.6; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .score-display { font-family: var(--font-code); font-size: 1.5rem; margin-bottom: 40px; color: rgba(255,255,255,0.6); }
+
+        footer { position: fixed; bottom: 30px; width: 100%; text-align: center; font-family: var(--font-code); font-size: 0.7rem; letter-spacing: 3px; color: rgba(255,255,255,0.2); }
+    </style>
+</head>
+<body>
+
+    <div class="mesh-bg"></div>
+    <div class="grid-system"></div>
+
+    <div class="container">
+        <div id="quiz-ui" class="quiz-card">
+            <div class="header">
+                <div class="system-id">SYS_CORE // HISTORY_INT_030</div>
+                <div class="progress-circle" id="prog-text">01 / 30</div>
+            </div>
+            <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+
+            <div class="question-area">
+                <div class="tag">> ENCRYPTED_QUERY</div>
+                <div class="question-text" id="q-text">Sistem Senkronize Ediliyor...</div>
+                <div class="options-grid" id="options-box"></div>
+            </div>
+
+            <div class="terminal" id="feedback">
+                <span style="color: var(--s-glow)">[LOG_UPDATE]:</span> <span id="rationale-text"></span>
+            </div>
+        </div>
+
+        <div id="result-ui" class="quiz-card result-screen">
+            <div class="sofia-brand">SOFIA.DEV</div>
+            <div class="score-display">SYNC_COMPLETE: <span id="final-score" style="color: #fff">0/30</span></div>
+            
+            <p class="final-quote">"Geçmişin tozlu sayfaları, geleceğin en parlak ışığıdır. Kendi tarihini yazanlar, dünyayı değiştirenlerdir."</p>
+            
+            <div style="font-family: var(--font-code); font-size: 0.8rem; opacity: 0.5; margin-bottom: 30px;">
+                STATUS: ARCHIVED_SUCCESSFULLY<br>
+                ENCRYPTION: AES-256-LGS
+            </div>
+            
+            <button onclick="location.reload()" style="background: transparent; border: 1px solid var(--p-glow); color: var(--p-glow); padding: 15px 40px; font-family: 'Orbitron'; font-weight: bold; border-radius: 50px; cursor: pointer; transition: 0.3s;">TEKRAR BAŞLAT</button>
+        </div>
+
+        <footer>CREATED BY SOFIA.DEV // LUMINAXE PREMIERE OS // 2026</footer>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "Trablusgarp Savaşı'nda Mustafa Kemal'in yerel halkı örgütlemesi hangi özelliğini kanıtlar?", a: ["Teşkilatçılık", "İnkılapçılık", "Eğitimcilik", "Barışçıllık"], c: 0, r: "Halkı bir amaç için birleştirmek liderlik ve teşkilatçılık göstergesidir." },
+            { q: "Osmanlı'nın kapitülasyonları kaldırması en çok hangi alanı rahatlatmıştır?", a: ["Dini", "Ekonomi", "Eğitim", "Askeri"], c: 1, r: "Kapitülasyonlar ekonomik imtiyazlardır, kaldırılması mali bağımsızlık sağlar." },
+            { q: "Amasya Genelgesi'nde 'milletin azim ve kararı' ifadesi Milli Mücadele'nin neyidir?", a: ["Gerekçesi", "Dış Yardımı", "Yöntemi", "Süresi"], c: 2, r: "Kurtuluşun 'nasıl' yapılacağı (millet kararıyla) yöntemdir." },
+            { q: "Erzurum Kongresi'nde manda ve himayenin reddedilmesi neyi savunur?", a: ["Laiklik", "Devletçilik", "Tam Bağımsızlık", "Halkçılık"], c: 2, r: "Başka devletin korumasına girmemek tam bağımsızlık demektir." },
+            { q: "Misak-ı Milli'de sınırlamaların kaldırılması neye tepkidir?", a: ["Kapitülasyonlar", "Azınlık hakları", "Ordu düzeni", "Seçimler"], c: 0, r: "Siyasi ve mali kısıtlamalar doğrudan kapitülasyonlara bir tepkidir." },
+            { q: "Egemenliğin millete ait olması hangi yönetim biçiminin işaretidir?", a: ["Monarşi", "Teokrasi", "Cumhuriyet", "Oligarşi"], c: 2, r: "Halkın yönetime katılması Cumhuriyet sisteminin temelidir." },
+            { q: "Sevr Antlaşması'nın hukuken geçersiz olma sebebi nedir?", a: ["Ağır olması", "Padişah imzası", "Meclis onayı yokluğu", "Fransız etkisi"], c: 2, r: "Mebusan Meclisi onaylamadığı için yasal olarak yürürlüğe girememiştir." },
+            { q: "Gümrü Antlaşması'nın en büyük önemi nedir?", a: ["TBMM'nin ilk siyasi zaferi", "Lozan'ı bitirmesi", "Güneyi kurtarması", "Rus desteği"], c: 0, r: "Meclisin varlığının başka bir devlet tarafından ilk kez tanınmasıdır." },
+            { q: "Güney Cephesi'nde direnişi başlatan ana güç nedir?", a: ["Düzenli Ordu", "Kuvay-ı Milliye", "Yunan Ordusu", "Sovyetler"], c: 1, r: "Güneyde halk sivil direnişi (Kuvay-ı Milliye) ile zafer kazanmıştır." },
+            { q: "Tekalif-i Milliye Emirleri'nin temel amacı nedir?", a: ["Anayasa yapmak", "Ordunun ihtiyaçları", "Okul açmak", "Vergi düşürmek"], c: 1, r: "Ordunun lojistik eksiklerini halktan tamamlamaktır." },
+            { q: "Hattı müdafaa yoktur, sathı müdafaa vardır sözü hangi stratejidir?", a: ["Geri çekilme", "Topyekun Savunma", "Barış isteği", "Deniz savaşı"], c: 1, r: "Vatanın her karışının sonuna kadar korunmasıdır." },
+            { q: "Mudanya ile savaş yapılmadan kurtarılan yerlerden hangisi yoktur?", a: ["İstanbul", "Doğu Trakya", "Boğazlar", "İzmir"], c: 3, r: "İzmir askeri harekatla kurtarılmıştır." },
+            { q: "Lozan'da çözülemeyip sonraya bırakılan tek konu?", a: ["Boğazlar", "Musul", "Kapitülasyonlar", "Borçlar"], c: 1, r: "Musul meselesi İngiltere ile yaşanan kriz nedeniyle ertelenmiştir." },
+            { q: "Saltanatın kaldırılması hangi ilkeyle doğrudan ilişkilidir?", a: ["Devletçilik", "Cumhuriyetçilik", "Laiklik", "Milliyetçilik"], c: 1, r: "Milli egemenliği engelleyen tek adam sisteminin sona ermesidir." },
+            { q: "1926 Medeni Kanun ile kadınlara hangi hak verilmemiştir?", a: ["Miras", "Boşanma", "Vekil Seçilme", "Şahitlik"], c: 2, r: "Siyasi haklar 1930'lu yıllarda verilmiştir." },
+            { q: "Kabotaj Kanunu hangi Atatürk ilkesinin sonucudur?", a: ["Halkçılık", "Milliyetçilik", "Laiklik", "Cumhuriyetçilik"], c: 1, r: "Denizlerdeki Türk egemenliği ekonomik milliyetçiliktir." },
+            { q: "Tevhid-i Tedrisat Kanunu'nun hedefi nedir?", a: ["Eğitimde birlik", "Yeni alfabe", "Yurtdışı eğitim", "Dini yasak"], c: 0, r: "Eğitimin tek merkezden ve çağdaş yönetilmesidir." },
+            { q: "Hayatta en hakiki mürşit ilimdir sözü hangi ilkeyi açıklar?", a: ["Halkçılık", "Laiklik", "Devletçilik", "Milliyetçilik"], c: 1, r: "Akılcılık ve bilim odaklılık laik düşüncenin temelidir." },
+            { q: "Takrir-i Sükun Kanunu'nun çıkarılma sebebi?", a: ["İsyan bastırmak", "Seçim yapmak", "Borç ödemek", "Ordu kurmak"], c: 0, r: "Şeyh Sait isyanı sonrası huzur ortamını sağlamaktır." },
+            { q: "Menemen Olayı neyin henüz anlaşılmadığını gösterir?", a: ["Teknoloji", "Laik Cumhuriyet", "Askerlik", "Tarım"], c: 1, r: "İnkılapların bazı kesimlerce dirençle karşılandığını kanıtlar." },
+            { q: "Köylü milletin efendisidir sözü hangi ilke ile ilgilidir?", a: ["Devletçilik", "Halkçılık", "Milliyetçilik", "Laiklik"], c: 1, r: "Toplumsal eşitlik ve sınıfsız toplum anlayışıdır." },
+            { q: "1929 sonrası uygulanan Devletçilik'in temel sebebi?", a: ["Sermaye yetersizliği", "Özel sektörü yasaklamak", "Dış borç", "Nüfus"], c: 0, r: "Halkta sermaye olmadığı için devleti yatırıma zorlamıştır." },
+            { q: "Soyadı Kanunu'nun temel amacı?", a: ["Alfabe değiştirmek", "Karışıklığı önlemek", "Unvan artırmak", "Seçim"], c: 1, r: "Resmi işlerdeki kimlik karmaşasını bitirmektir." },
+            { q: "Hatay'ın ana vatana katılması Atatürk'ün hangi özelliğidir?", a: ["Vatanseverlik", "Sanatseverlik", "Eğitimcilik", "Ekonomi"], c: 0, r: "Hatay davasından vazgeçmemesi büyük vatan sevgisidir." },
+            { q: "Mustafa Kemal Batı kültürünü nerede yakından tanımıştır?", a: ["Şam", "Erzurum", "Manastır", "Sivas"], c: 2, r: "Manastır çevresi Batı düşüncesinin merkezidir." },
+            { q: "Maarif Kongresi (1921) neden savaş anında toplandı?", a: ["Silah için", "Eğitim önemi için", "Barış için", "Vergi için"], c: 1, r: "Cehaletle savaşın önemini vurgular." },
+            { q: "Hangisi Atatürk Milliyetçiliği anlayışına aykırıdır?", a: ["Irkçılık", "Milli Birlik", "Dil Birliği", "Bağımsızlık"], c: 0, r: "Irkçılık birleştirici milliyetçiliğe terstir." },
+            { q: "Sofya'da Ateşemiliterlik görevi ne kazandırmıştır?", a: ["Denizcilik", "Diplomasi", "Tıp", "Tarım"], c: 1, r: "Avrupa siyasetini ve diplomasisini yakından izlemiştir." },
+            { q: "İtalyanların çekilmesi neyin göstergesidir?", a: ["Yunan zaferi", "İtilaf birliğinin bozulması", "Savaşın bitişi", "Kış şartları"], c: 1, r: "Düşman bloğundaki çatlakları gösterir." },
+            { q: "Benim naciz vücudum toprak olacaktır sözü neyi vurgular?", a: ["Savaş", "Eğitim", "Cumhuriyetin sürekliliği", "Sağlık"], c: 2, r: "Kişiler geçici, devletin rejimi kalıcıdır." }
+        ];
+
+        let currentQ = 0; let score = 0; let canAnswer = true;
+
+        function renderQuestion() {
+            canAnswer = true;
+            const q = questions[currentQ];
+            document.getElementById('prog-text').innerText = `${(currentQ + 1).toString().padStart(2, '0')} / 30`;
+            document.getElementById('q-text').innerText = q.q;
+            document.getElementById('feedback').style.display = 'none';
+            const optionsBox = document.getElementById('options-box');
+            optionsBox.innerHTML = '';
+            
+            q.a.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(index, btn);
+                optionsBox.appendChild(btn);
+            });
+
+            const prog = ((currentQ) / questions.length) * 100;
+            document.getElementById('progress-fill').style.width = `${prog}%`;
+        }
+
+        function checkAnswer(idx, btn) {
+            if (!canAnswer) return;
+            canAnswer = false;
+            const correctIdx = questions[currentQ].c;
+            const btns = document.querySelectorAll('.option-btn');
+            
+            if (idx === correctIdx) {
+                btn.classList.add('correct');
+                score++;
+            } else {
+                btn.classList.add('wrong');
+                btns[correctIdx].classList.add('correct');
+            }
+
+            document.getElementById('rationale-text').innerText = questions[currentQ].r;
+            document.getElementById('feedback').style.display = 'block';
+
+            setTimeout(() => {
+                currentQ++;
+                if (currentQ < questions.length) renderQuestion();
+                else showResults();
+            }, 2000);
+        }
+
+        function showResults() {
+            document.getElementById('quiz-ui').style.display = 'none';
+            document.getElementById('result-ui').style.display = 'block';
+            document.getElementById('final-score').innerText = `${score} / 30`;
+        }
+
+        window.onload = renderQuestion;
+    </script>
+</body>
+</html>
+
