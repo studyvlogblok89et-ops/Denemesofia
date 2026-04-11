@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMINAXE | Ultimate Premiere OS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --p-glow: #bc13fe; --s-glow: #00f2ff;
+            --ash-color: #ff4d4d; --lucy-color: #ffcc00; --sofia-color: #bc13fe;
+            --bg-deep: #05010a; --glass: rgba(15, 5, 25, 0.85);
+            --font-code: 'Fira Code', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        body { background-color: var(--bg-deep); color: #fff; font-family: 'Space Grotesk', sans-serif; overflow-x: hidden; }
+
+        .loader-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            animation: fadeOutLoader 1s ease forwards 3.5s;
+        }
+        .loader-text {
+            font-family: var(--font-code); color: var(--s-glow); font-size: 1.2rem;
+            border-right: 2px solid var(--s-glow); white-space: nowrap; overflow: hidden;
+            animation: typing 2.5s steps(40, end), blink 0.5s step-end infinite;
+        }
+
+        .mesh-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(circle at 10% 10%, rgba(188, 19, 254, 0.15), transparent 40%), radial-gradient(circle at 90% 90%, rgba(0, 242, 255, 0.1), transparent 40%); }
+        .grid-system { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-image: linear-gradient(rgba(188, 19, 254, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(188, 19, 254, 0.05) 1px, transparent 1px); background-size: 50px 50px; mask-image: radial-gradient(circle at center, black, transparent 85%); }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 60px 40px; }
+        header { height: 60vh; display: flex; flex-direction: column; justify-content: center; border-left: 2px solid var(--p-glow); padding-left: 40px; margin-bottom: 50px; }
+        .hero-title { font-family: 'Orbitron'; font-size: clamp(3rem, 10vw, 7rem); font-weight: 900; letter-spacing: -5px; background: linear-gradient(to right, #fff, var(--p-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .section-header { font-family: 'Orbitron'; font-size: 1.8rem; margin: 100px 0 40px; color: var(--s-glow); display: flex; align-items: center; gap: 20px; }
+        .section-header::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--p-glow), transparent); }
+
+        .quiz-container { background: rgba(10, 10, 20, 0.95); border: 1px solid var(--p-glow); border-radius: 30px; padding: 60px; min-height: 550px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .option-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 18px; border-radius: 15px; cursor: pointer; transition: 0.3s; width: 100%; margin-bottom: 12px; font-size: 1rem; text-align: left; }
+        .option-btn:hover { background: var(--p-glow); color: black; font-weight: 600; transform: translateX(10px); }
+        .progress-meta { position: absolute; top: 20px; right: 40px; font-family: var(--font-code); color: var(--s-glow); font-size: 0.8rem; }
+
+        .result-card { background: rgba(255,255,255,0.05); padding: 30px; border-radius: 20px; border: 1px solid var(--s-glow); margin-top: 20px; font-family: var(--font-code); }
+        .stat-line { margin: 15px 0; }
+        .bar-bg { background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; margin-top: 5px; }
+        .bar-fill { height: 100%; border-radius: 4px; transition: 1.5s ease-out; }
+
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink { 50% { border-color: transparent } }
+        @keyframes fadeOutLoader { to { opacity: 0; visibility: hidden; } }
+    </style>
+</head>
+<body onload="startSystem()">
+
+    <div class="loader-overlay">
+        <div class="loader-text">> LUMINAXE_V6_CORE_READY...</div>
+    </div>
+
+    <div class="mesh-bg"></div>
+    <div class="grid-system"></div>
+
+    <div class="container">
+        <header>
+            <h1 class="hero-title">LUMINAXE<span style="color: var(--p-glow);">.</span></h1>
+            <p style="color: var(--s-glow); letter-spacing: 5px; text-transform: uppercase;">Neural Identity & Persona Mapping</p>
+        </header>
+
+        <h2 class="section-header">SYSTEM // PERSONA_SCAN</h2>
+        <div class="quiz-container" id="quiz-box">
+            <div id="quiz-content" style="width: 100%; max-width: 800px; text-align: center;">
+                <p style="font-family: 'Orbitron'; font-size: 2rem; margin-bottom: 20px;">INITIALIZING SCAN</p>
+                <p style="margin-bottom: 40px; opacity: 0.7;">20 aşamalı derin kişilik protokolünü başlat. Drama, Otorite ve Sistem uyumun analiz edilecek.</p>
+                <button class="option-btn" style="background: var(--p-glow); border: none; color: #fff; text-align: center;" onclick="beginQuiz()">PROTOKOLÜ BAŞLAT</button>
+            </div>
+        </div>
+
+        <footer style="padding: 80px 0; text-align: center; opacity: 0.4; font-family: var(--font-code); font-size: 0.8rem;">
+            LUMINAXE // INTEGRATED_MIMICRY_V6.0 // DEV_BY_SOFIA
+        </footer>
+    </div>
+
+    <script>
+        const quizData = [
+            { q: "İnternet 10 dakika kesildi, tepkin?", a: "Dünyam başıma yıkıldı, bu bir felaket!", b: "Hızlıca modemi resetler, çözüm ararım.", c: "Sistemi baştan aşağı sorgularım.", d: "Kitap okur, sakin kalırım." },
+            { q: "Birisi şakayla karışık seni eleştirdi.", a: "Günlerce ne demek istediğini düşünür, ağlarım.", b: "Hatasını anında yüzüne vururum.", c: "Eleştiriyi analiz edip kendimi geliştiririm.", d: "Duymam bile." },
+            { q: "Grup ödevinde kimse çalışmıyor.", a: "Gruptan çıkar, hepsini her yerden engellerim.", b: "Masaya yumruğumu vurur, görevleri dağıtırım.", c: "Sistemi ben kurar, projeyi yönetirim.", d: "Sessizce kendiminkini bitiririm." },
+            { q: "Sana 'Abartıyorsun' dediler.", a: "Asıl sen beni anlamıyorsun! (Bağırarak)", b: "Nedenini sorar, ikna ederim.", c: "Abartı benim imzamdır derim.", d: "Cevap vermeye gerek duymam." },
+            { q: "En yakın arkadaşın mesajına geç döndü.", a: "Kesin benden nefret ediyor diye senaryo yazarım.", b: "Nedenini sorar, hemen hesap sorarım.", c: "Ben de geç dönerim, dengeyi kurarım.", d: "Müsait olunca yazar derim." },
+            { q: "Zor bir hedef koydun ama engeller çıktı.", a: "Neden her şey beni buluyor diye söylenirim.", b: "Engelleri yıkar geçerim.", c: "Yeni bir strateji geliştiririm.", d: "Zamana bırakırım." },
+            { q: "Tırnağın kırıldı veya telefonun çizildi.", a: "Hayatın sonu gelmiş gibi davranırım.", b: "Yenisini almak için plan yaparım.", c: "Onu yeni bir tasarım detayı gibi görürüm.", d: "Kullanım izidir der geçerim." },
+            { q: "Hatalı olduğunu anladığında tepkin?", a: "Çok kötü hisseder, kendimi suçlarım.", b: "Hemen kabul eder ve düzeltirim.", c: "Hata değil, bir güncelleme derim.", d: "Sessizce düzeltirim." },
+            { q: "Birisi fikrini çaldığında ne yaparsın?", a: "Sosyal medyada linç başlatırım.", b: "Hakkımı sonuna kadar savunurum.", c: "Daha iyisini yapıp onu utandırırım.", d: "Sessizce izlerim." },
+            { q: "Bir kriz anında (Hata, sızıntı vs.)?", a: "Panik yapar, herkesi ararım.", b: "Kontrolü ele alıp çözüm üretirim.", c: "Veriyi sanat haline getiririm.", d: "Gözlem yaparım." },
+            { q: "Para yönetimi konusunda tarzın?", a: "İstediğimi hemen alırım, kriz yönetirim.", b: "Yatırım odaklı ve kontrollüyüm.", c: "Estetik olan her şeye harcarım.", d: "Hesabımı hiç bilmem." },
+            { q: "Sana 'Yapamazsın' dediklerinde?", a: "Ağlayarak odayı terk ederim.", b: "Sırf onlara inat en iyisini yaparım.", c: "Neden yapamayacağımı onlara kodla açıklarım.", d: "Gülümser geçerim." },
+            { q: "Toplantı veya ders çok uzadı.", a: "Of çekip herkesin modunu düşürürüm.", b: "Sadede gelinmesi için müdahale ederim.", c: "O sırada yeni bir proje tasarlarım.", d: "Sessizce not tutarım." },
+            { q: "Aynada sivilce gördüğünde?", a: "Dışarı çıkmayı reddeder, yas tutarım.", b: "Hemen müdahale eder, çözüm bulurum.", c: "Onu bir yıldız gibi süslerim.", d: "Görmem bile." },
+            { q: "Başarı senin için nedir?", a: "Herkesin beni konuşması.", b: "Sınırsız güç ve otorite.", c: "Kusursuz bir eser yaratmak.", d: "Huzurlu ve sessiz bir hayat." },
+            { q: "Zaman durdu, ne yaparsın?", a: "Düşmanlarımdan intikam alırım (Dramatic).", b: "Dünyayı yönetmek için plan kurarım.", c: "Donmuş dünyada bir sanat eseri yaparım.", d: "Sessizliğin tadını çıkarırım." },
+            { q: "Ekipteki rolün nedir?", a: "Duygusal destek ve kaos kaynağı.", b: "Mutlak lider ve operasyon beyni.", c: "Sistem mimarı ve tasarımcı.", d: "Gölge takipçi." },
+            { q: "Luminaxe sana bir emir verdi.", a: "Kendi emrimi veririm (Drama).", b: "En mantıklı yolu seçip uygularım.", c: "Emri daha güzel bir hale getiririm.", d: "Gözlemlerim." },
+            { q: "En büyük zayıflığın ne olabilir?", a: "Duygularım.", b: "Hırsım.", c: "Mükemmeliyetçiliğim.", d: "Yalnızlığım." },
+            { q: "Final: Bu testi bitirdiğinde ne hissettin?", a: "Çok heyecanlıyım, sonuç ne!", b: "Zamanımı iyi kullandım.", c: "İlginç bir deneyimdi.", d: "Sadece bitti." }
+        ];
+
+        let currentQ = 0;
+        let scores = { drama: 0, boss: 0, system: 0, observer: 0 };
+
+        function startSystem() { setTimeout(() => { }, 3500); }
+
+        function beginQuiz() { renderQuestion(); }
+
+        function renderQuestion() {
+            const content = document.getElementById('quiz-content');
+            const q = quizData[currentQ];
+            content.style.textAlign = "left";
+            content.innerHTML = `
+                <div class="progress-meta">NEURAL_LINK: ${currentQ + 1} / 20</div>
+                <p style="color: var(--s-glow); margin-bottom: 10px; font-family: var(--font-code);">[ SEQUENCE_${currentQ + 1} ]</p>
+                <p style="font-size: 1.5rem; margin-bottom: 30px; font-family: 'Orbitron'; line-height: 1.4;">${q.q}</p>
+                <button class="option-btn" onclick="next('drama')">A > ${q.a}</button>
+                <button class="option-btn" onclick="next('boss')">B > ${q.b}</button>
+                <button class="option-btn" onclick="next('system')">C > ${q.c}</button>
+                <button class="option-btn" onclick="next('observer')">D > ${q.d}</button>
+            `;
+        }
+
+        function next(type) {
+            scores[type]++;
+            currentQ++;
+            if (currentQ < quizData.length) renderQuestion(); else showResult();
+        }
+
+        function showResult() {
+            const dP = Math.round((scores.drama / 20) * 100);
+            const bP = Math.round((scores.boss / 20) * 100);
+            const sP = Math.round((scores.system / 20) * 100);
+
+            document.getElementById('quiz-content').innerHTML = `
+                <h2 style="font-family: 'Orbitron'; color: var(--p-glow); font-size: 2.5rem; margin-bottom: 20px;">SYNC COMPLETE</h2>
+                <div class="result-card">
+                    <div class="stat-line">
+                        <span>DRAMA QUEEN SEVİYESİ: %${dP}</span>
+                        <div class="bar-bg"><div class="bar-fill" style="width:${dP}%; background:var(--ash-color)"></div></div>
+                    </div>
+                    <div class="stat-line">
+                        <span>BOSS STATUS SEVİYESİ: %${bP}</span>
+                        <div class="bar-bg"><div class="bar-fill" style="width:${bP}%; background:var(--lucy-color)"></div></div>
+                    </div>
+                    <div class="stat-line">
+                        <span>SİSTEM UYUMU (SYSTEM ARCHITECT): %${sP}</span>
+                        <div class="bar-bg"><div class="bar-fill" style="width:${sP}%; background:var(--p-glow)"></div></div>
+                    </div>
+                </div>
+                <p style="margin-top:20px; opacity:0.7; font-size:0.9rem;">> Rapor: ${dP > 50 ? 'Yüksek duygusal enerji tespit edildi.' : 'Düşük drama frekansı.'} ${bP > 50 ? 'Liderlik modülleri aktif.' : 'Destek birimi profili.'}</p>
+                <button class="option-btn" style="margin-top:30px; text-align: center; width: auto; padding: 15px 40px;" onclick="location.reload()">RE-BOOT SYSTEM</button>
+            `;
+        }
+    </script>
+</body>
+</html>
+
