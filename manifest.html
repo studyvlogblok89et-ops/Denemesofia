@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MANIFEST | Ultimate Persona OS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --mina: #ff4d4d;    /* Kırmızı */
+            --sueda: #00ff88;   /* Yeşil */
+            --zeynep: #00f2ff;  /* Mavi */
+            --hilal: #bc13fe;   /* Mor */
+            --lidya: #ff80bf;   /* Pembe */
+            --esin: #ffcc00;    /* Sarı */
+            --bg-deep: #05010a; 
+            --p-glow: #ffffff;
+            --font-code: 'Fira Code', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        body { background-color: var(--bg-deep); color: #fff; font-family: 'Space Grotesk', sans-serif; overflow-x: hidden; }
+
+        /* Loader */
+        .loader-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            animation: fadeOutLoader 1s ease forwards 3s;
+        }
+        .loader-text {
+            font-family: var(--font-code); color: var(--zeynep); font-size: 1.2rem;
+            border-right: 2px solid var(--zeynep); white-space: nowrap; overflow: hidden;
+            animation: typing 2s steps(40, end), blink 0.5s step-end infinite;
+        }
+
+        /* Arkaplan Efektleri */
+        .mesh-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(circle at 10% 10%, rgba(188, 19, 254, 0.15), transparent 40%); }
+        .grid-system { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px); background-size: 50px 50px; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 60px 40px; }
+        header { height: 40vh; display: flex; flex-direction: column; justify-content: center; border-left: 2px solid #fff; padding-left: 40px; margin-bottom: 50px; }
+        .hero-title { font-family: 'Orbitron'; font-size: clamp(3rem, 10vw, 6rem); font-weight: 900; letter-spacing: -2px; }
+        
+        .section-header { font-family: 'Orbitron'; font-size: 1.5rem; margin-bottom: 40px; color: var(--zeynep); display: flex; align-items: center; gap: 20px; text-transform: uppercase; letter-spacing: 5px; }
+        .section-header::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, #fff, transparent); }
+
+        /* Quiz Box */
+        .quiz-container { background: rgba(10, 10, 20, 0.95); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; padding: 60px; min-height: 550px; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .option-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 20px; border-radius: 15px; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 100%; margin-bottom: 12px; font-size: 1rem; text-align: left; font-family: 'Space Grotesk'; }
+        
+        /* Dinamik Renkler */
+        .btn-mina:hover { border-color: var(--mina); box-shadow: 0 0 20px var(--mina); color: var(--mina); transform: translateX(10px); }
+        .btn-sueda:hover { border-color: var(--sueda); box-shadow: 0 0 20px var(--sueda); color: var(--sueda); transform: translateX(10px); }
+        .btn-zeynep:hover { border-color: var(--zeynep); box-shadow: 0 0 20px var(--zeynep); color: var(--zeynep); transform: translateX(10px); }
+        .btn-hilal:hover { border-color: var(--hilal); box-shadow: 0 0 20px var(--hilal); color: var(--hilal); transform: translateX(10px); }
+        .btn-lidya:hover { border-color: var(--lidya); box-shadow: 0 0 20px var(--lidya); color: var(--lidya); transform: translateX(10px); }
+        .btn-esin:hover { border-color: var(--esin); box-shadow: 0 0 20px var(--esin); color: var(--esin); transform: translateX(10px); }
+
+        .progress-meta { position: absolute; top: 30px; right: 40px; font-family: var(--font-code); color: rgba(255,255,255,0.4); font-size: 0.8rem; }
+
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink { 50% { border-color: transparent } }
+        @keyframes fadeOutLoader { to { opacity: 0; visibility: hidden; } }
+    </style>
+</head>
+<body>
+
+    <div class="loader-overlay">
+        <div class="loader-text">> MANIFEST_CORE_PROTOCOL_READY...</div>
+    </div>
+
+    <div class="mesh-bg"></div>
+    <div class="grid-system"></div>
+
+    <div class="container">
+        <header>
+            <h1 class="hero-title">MANIFEST<span style="color: var(--hilal);">.</span></h1>
+            <p style="color: var(--zeynep); letter-spacing: 5px; text-transform: uppercase; font-size: 0.8rem;">Neural Identity & Persona Mapping</p>
+        </header>
+
+        <h2 class="section-header">SYSTEM // PERSONA_SCAN</h2>
+        <div class="quiz-container" id="quiz-box">
+            <div id="quiz-content" style="width: 100%; max-width: 800px; text-align: center;">
+                <p style="font-family: 'Orbitron'; font-size: 2rem; margin-bottom: 20px;">SYNC INITIALIZED</p>
+                <p style="margin-bottom: 40px; opacity: 0.6; line-height: 1.6;">Grup içindeki enerjin, stilin ve kararların analiz edilerek hangi Manifest üyesine %100 uyumlu olduğun hesaplanacak.</p>
+                <button class="option-btn" style="text-align: center; border-color: #fff;" onclick="startQuiz()">PROTOKOLÜ BAŞLAT</button>
+            </div>
+        </div>
+
+        <footer style="padding: 80px 0; text-align: center; opacity: 0.3; font-family: var(--font-code); font-size: 0.7rem;">
+            MANIFEST // INTEGRATED_MIMICRY_V7.0 // SECURE_SYNC
+        </footer>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "Hangi ortamda kendini daha rahat hissedersin?", a: "Spot ışıkları altında.", b: "Doğanın içinde, huzurlu bir yerde.", c: "Teknolojik ve modern bir ofiste.", d: "Sanatsal ve gizemli bir sergide.", e: "Şık bir moda haftasında.", f: "Eğlenceli bir festivalde." },
+            { q: "Arkadaş grubunda hangi özelliğinle tanınırsın?", a: "Liderliğimle.", b: "Sempatikliğimle.", c: "Zekamla.", d: "Enerjimle.", e: "Tarzımlam.", f: "Pozitifliğimle." },
+            { q: "Bir tatil planı yapsan nereye gidersin?", a: "New York", b: "Bali", c: "Tokyo", d: "Paris", e: "Milano", f: "Ibiza" },
+            { q: "En sevdiğin aksesuar?", a: "Göz alıcı bir kolye.", b: "Doğal taşlı bir bileklik.", c: "Akıllı saat.", d: "İkonik bir şapka.", e: "Marka bir çanta.", f: "Renkli güneş gözlüğü." },
+            { q: "Bir şarkı olsan türün ne olurdu?", a: "Güçlü bir Pop.", b: "Sakin bir Indie.", c: "Modern R&B.", d: "Enerjik Elektronik.", e: "Klasik ve Şık.", f: "Eğlenceli Disco." },
+            { q: "Hangi süper güce sahip olmak isterdin?", a: "Görünmezlik.", b: "Doğayı kontrol etme.", c: "Zihin okuma.", d: "Işınlanma.", e: "Zamanı durdurma.", f: "Uçabilme." },
+            { q: "Giyim tarzını nasıl tanımlarsın?", a: "İddialı ve kırmızı detaylı.", b: "Rahat ve doğal tonlar.", c: "Minimalist ve cool.", d: "Sıradışı ve dikkat çekici.", e: "Trendleri takip eden ve lüks.", f: "Renkli ve cıvıl cıvıl." },
+            { q: "Bir film izleyecek olsan?", a: "Aksiyon.", b: "Belgesel.", c: "Bilim Kurgu.", d: "Fantastik.", e: "Romantik Komedi.", f: "Müzikal." },
+            { q: "En çok neye önem verirsin?", a: "Başarıya.", b: "Samimiyete.", c: "Mantığa.", d: "Özgürlüğe.", e: "Estetiğe.", f: "Mutluluğa." },
+            { q: "Manifest ekibinde seni en çok ne heyecanlandırır?", a: "Sahne duruşu.", b: "Ekip ruhu.", c: "Üretim süreci.", d: "Dans performansları.", e: "Kliplerdeki stil.", f: "Hayranlarla iletişim." }
+        ];
+
+        const members = [
+            { id: 'mina', name: 'Mina Solak', color: 'var(--mina)', desc: 'Kırmızının gücü! Grubun lider ruhlu vizyonerisin.' },
+            { id: 'sueda', name: 'Sueda Uluca', color: 'var(--sueda)', desc: 'Yeşilin enerjisi! Doğallığınla herkesi büyülüyorsun.' },
+            { id: 'zeynep', name: 'Zeynep Sude Oktay', color: 'var(--zeynep)', desc: 'Mavinin derinliği! Zekanla her zaman bir adım öndesin.' },
+            { id: 'hilal', name: 'Hilal Yelekçi', color: 'var(--hilal)', desc: 'Morun gizemi! Sahne enerjin ve ruhun çok yüksek.' },
+            { id: 'lidya', name: 'Lidya Pınar', color: 'var(--lidya)', desc: 'Pembenin şıklığı! Tam bir stil ikonu ve zarafet örneğisin.' },
+            { id: 'esin', name: 'Esin Bahat', color: 'var(--esin)', desc: 'Sarının ışığı! Neşenle etrafına her zaman pozitiflik saçıyorsun.' }
+        ];
+
+        let current = 0;
+        let scores = { a:0, b:0, c:0, d:0, e:0, f:0 };
+
+        function startQuiz() { render(); }
+
+        function render() {
+            const box = document.getElementById('quiz-content');
+            const q = questions[current];
+            box.style.textAlign = "left";
+            box.innerHTML = `
+                <div class="progress-meta">NEURAL_LINK: ${current + 1} / 10</div>
+                <p style="color: var(--zeynep); margin-bottom: 10px; font-family: var(--font-code);">[ SEQUENCE_${current + 1} ]</p>
+                <p style="font-size: 1.5rem; margin-bottom: 30px; font-family: 'Orbitron'; line-height: 1.4;">${q.q}</p>
+                <button class="option-btn btn-mina" onclick="vote('a')">A > ${q.a}</button>
+                <button class="option-btn btn-sueda" onclick="vote('b')">B > ${q.b}</button>
+                <button class="option-btn btn-zeynep" onclick="vote('c')">C > ${q.c}</button>
+                <button class="option-btn btn-hilal" onclick="vote('d')">D > ${q.d}</button>
+                <button class="option-btn btn-lidya" onclick="vote('e')">E > ${q.e}</button>
+                <button class="option-btn btn-esin" onclick="vote('f')">F > ${q.f}</button>
+            `;
+        }
+
+        function vote(key) {
+            scores[key]++;
+            current++;
+            if(current < 10) render(); else result();
+        }
+
+        function result() {
+            const win = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+            const map = { a:0, b:1, c:2, d:3, e:4, f:5 };
+            const girl = members[map[win]];
+            
+            document.getElementById('quiz-content').innerHTML = `
+                <h2 style="font-family: 'Orbitron'; color: ${girl.color}; font-size: 2.5rem; margin-bottom: 20px;">SYNC COMPLETE</h2>
+                <div style="background: rgba(255,255,255,0.05); padding: 40px; border-radius: 20px; border: 1px solid ${girl.color};">
+                    <p style="font-family: var(--font-code); font-size: 0.8rem; margin-bottom: 10px; opacity: 0.5;">MATCHED_PERSONA:</p>
+                    <h1 style="font-family: 'Orbitron'; font-size: 3.5rem; color: #fff; margin-bottom: 15px;">${girl.name.toUpperCase()}</h1>
+                    <p style="font-size: 1.1rem; color: ${girl.color}; font-weight: 600;">${girl.desc}</p>
+                </div>
+                <button class="option-btn" style="margin-top:30px; text-align: center; width: auto; padding: 15px 40px;" onclick="location.reload()">RE-BOOT SYSTEM</button>
+            `;
+        }
+    </script>
+</body>
+</html>
+
