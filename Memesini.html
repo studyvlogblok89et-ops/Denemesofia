@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MEME_WARS | Tablet Arena</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --p1-color: #ff4d4d;
+            --p2-color: #00f2ff;
+            --bg: #0a0a0f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+        body { background: var(--bg); color: #fff; font-family: 'Space Grotesk', sans-serif; overflow: hidden; height: 100vh; }
+
+        /* Arena Layout */
+        .game-wrapper { display: flex; flex-direction: column; height: 100vh; }
+
+        /* Dev Dokunmatik Butonlar */
+        .player-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron';
+            font-size: 3rem;
+            transition: 0.1s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .p1-btn { background: rgba(255, 77, 77, 0.1); border-bottom: 2px solid var(--p1-color); }
+        .p2-btn { background: rgba(0, 242, 255, 0.1); border-top: 2px solid var(--p2-color); }
+
+        .p1-btn:active { background: var(--p1-color); color: #000; }
+        .p2-btn:active { background: var(--p2-color); color: #000; }
+
+        /* Orta Panel: Meme Metni */
+        .center-display {
+            height: 40vh;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            z-index: 10;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+        }
+
+        .meme-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #bc13fe;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            min-height: 3.6rem;
+        }
+
+        .round-counter { font-family: monospace; font-size: 0.8rem; color: #666; }
+
+        /* Skor ve Animasyonlar */
+        .score { position: absolute; font-size: 5rem; opacity: 0.2; pointer-events: none; }
+        .p1-score { top: 10%; right: 5%; color: var(--p1-color); }
+        .p2-score { bottom: 10%; left: 5%; color: var(--p2-color); }
+
+        /* Sonuç Ekranı */
+        #result-screen {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: #000; z-index: 100; display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        .win-banner { font-family: 'Orbitron'; font-size: 4rem; text-align: center; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div id="result-screen">
+        <div id="win-banner" class="win-banner">OYUN BİTTİ</div>
+        <div id="final-score" style="font-size: 2rem; margin-bottom: 40px;"></div>
+        <button onclick="location.reload()" style="padding: 20px 50px; background: #bc13fe; color: white; border: none; font-family: 'Orbitron'; border-radius: 50px;">TEKRAR SAVAŞ</button>
+    </div>
+
+    <div class="game-wrapper">
+        <div class="player-btn p1-btn" ontouchstart="hit('p1')" onmousedown="hit('p1')">
+            P1 <span class="score p1-score" id="p1-score">0</span>
+        </div>
+
+        <div class="center-display">
+            <div id="status" style="font-size: 0.7rem; color: #444; margin-bottom: 5px;">SYSTEM_ONLINE</div>
+            <div id="meme-box" class="meme-text">DOKUN VE BAŞLA!</div>
+            <div class="round-counter" id="round-counter">TUR: 0 / 15</div>
+        </div>
+
+        <div class="player-btn p2-btn" ontouchstart="hit('p2')" onmousedown="hit('p2')">
+            P2 <span class="score p2-score" id="p2-score">0</span>
+        </div>
+    </div>
+
+    <script>
+        const memes = [
+            "3 saat ders çalıştıktan sonra gelen 'Ben ne okudum amk' hissi",
+            "Maaş yattıktan 15 saniye sonra gelen 'Ben niye fakirim' bildirimi",
+            "Sınıf grubunda atılan aşırı cringe espriler",
+            "Gece 3'te tavanı izlerken kurulan o imkansız senaryolar",
+            "Biten tuvalet kağıdının ardından yaşanan sessiz dram",
+            "Eski sevgilinin hikayesini yanlışlıkla beğenmek",
+            "Diyetin ilk gününde önünden geçen o çıtır lahmacun",
+            "Pazartesi sabahı alarm çaldığında girilen varoluşsal sancı",
+            "Halıya çarpan serçe parmağın acısı",
+            "Kasiyer 'Afiyet olsun' deyince 'Sana da' demek",
+            "Odada uçan o tek sineğin verdiği intikam ateşi",
+            "Toplantıda gelen o zamansız gülme krizi",
+            "WhatsApp'ta 'Yazıyor...' görüp 10 dakika beklemek",
+            "Kendi sesini kayıttan dinleyince gelen kusma isteği",
+            "Telefonun şarjı %100 olunca hissedilen o sahte güç"
+        ];
+
+        let currentRound = 0;
+        let scores = { p1: 0, p2: 0 };
+        let canHit = false;
+        let gameStarted = false;
+
+        function hit(player) {
+            if(!gameStarted) {
+                gameStarted = true;
+                nextRound();
+                return;
+            }
+            if(!canHit) return;
+
+            canHit = false;
+            scores[player]++;
+            document.getElementById(`${player}-score`).textContent = scores[player];
+            
+            // Görsel geri bildirim
+            document.getElementById('meme-box').innerHTML = `<span style="color:white">KAZANAN: ${player.toUpperCase()}!</span>`;
+            
+            setTimeout(nextRound, 1000);
+        }
+
+        function nextRound() {
+            if(currentRound >= memes.length) {
+                endGame();
+                return;
+            }
+
+            canHit = false;
+            document.getElementById('meme-box').textContent = "... HAZIRLAN ...";
+            document.getElementById('round-counter').textContent = `TUR: ${currentRound + 1} / ${memes.length}`;
+
+            // Rastgele süre sonra meme gelsin (refleks testi)
+            const delay = 1000 + (Math.random() * 2000);
+            
+            setTimeout(() => {
+                document.getElementById('meme-box').textContent = memes[currentRound];
+                canHit = true;
+                currentRound++;
+            }, delay);
+        }
+
+        function endGame() {
+            const banner = document.getElementById('win-banner');
+            if(scores.p1 > scores.p2) {
+                banner.textContent = "P1 KAZANDI!";
+                banner.style.color = "var(--p1-color)";
+            } else if(scores.p2 > scores.p1) {
+                banner.textContent = "P2 KAZANDI!";
+                banner.style.color = "var(--p2-color)";
+            } else {
+                banner.textContent = "BERABERE!";
+            }
+            document.getElementById('final-score').textContent = `P1: ${scores.p1} - P2: ${scores.p2}`;
+            document.getElementById('result-screen').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
+
