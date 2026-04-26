@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMINAXE | LGS Adrenalin Mode</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --p-glow: #bc13fe; --s-glow: #00f2ff;
+            --ash-color: #ff4d4d; --lucy-color: #ffcc00; --sofia-color: #bc13fe;
+            --bg-deep: #05010a; --glass: rgba(15, 5, 25, 0.85);
+            --font-code: 'Fira Code', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        body { background-color: var(--bg-deep); color: #fff; font-family: 'Space Grotesk', sans-serif; overflow-x: hidden; }
+
+        .loader-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            animation: fadeOutLoader 1s ease forwards 3.5s;
+        }
+        .loader-text {
+            font-family: var(--font-code); color: var(--s-glow); font-size: 1.2rem;
+            border-right: 2px solid var(--s-glow); white-space: nowrap; overflow: hidden;
+            animation: typing 2.5s steps(40, end), blink 0.5s step-end infinite;
+        }
+
+        .mesh-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(circle at 10% 10%, rgba(188, 19, 254, 0.15), transparent 40%), radial-gradient(circle at 90% 90%, rgba(0, 242, 255, 0.1), transparent 40%); }
+        .grid-system { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-image: linear-gradient(rgba(188, 19, 254, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(188, 19, 254, 0.05) 1px, transparent 1px); background-size: 50px 50px; mask-image: radial-gradient(circle at center, black, transparent 85%); }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 60px 40px; }
+        header { height: 60vh; display: flex; flex-direction: column; justify-content: center; border-left: 2px solid var(--p-glow); padding-left: 40px; margin-bottom: 50px; }
+        .hero-title { font-family: 'Orbitron'; font-size: clamp(3rem, 10vw, 7rem); font-weight: 900; letter-spacing: -5px; background: linear-gradient(to right, #fff, var(--p-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .section-header { font-family: 'Orbitron'; font-size: 1.8rem; margin: 100px 0 40px; color: var(--s-glow); display: flex; align-items: center; gap: 20px; }
+        .section-header::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--p-glow), transparent); }
+
+        .quiz-container { background: rgba(10, 10, 20, 0.95); border: 1px solid var(--p-glow); border-radius: 30px; padding: 60px; min-height: 550px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .option-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 18px; border-radius: 15px; cursor: pointer; transition: 0.3s; width: 100%; margin-bottom: 12px; font-size: 1rem; text-align: left; }
+        .option-btn:hover { background: var(--p-glow); color: black; font-weight: 600; transform: translateX(10px); }
+        .progress-meta { position: absolute; top: 20px; right: 40px; font-family: var(--font-code); color: var(--s-glow); font-size: 0.8rem; }
+
+        .result-card { background: rgba(255,255,255,0.05); padding: 30px; border-radius: 20px; border: 1px solid var(--s-glow); margin-top: 20px; font-family: var(--font-code); }
+        .stat-line { margin: 15px 0; }
+        .bar-bg { background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; margin-top: 5px; }
+        .bar-fill { height: 100%; border-radius: 4px; transition: 1.5s ease-out; }
+
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink { 50% { border-color: transparent } }
+        @keyframes fadeOutLoader { to { opacity: 0; visibility: hidden; } }
+    </style>
+</head>
+<body onload="startSystem()">
+
+    <div class="loader-overlay">
+        <div class="loader-text">> LGS_ADRENALIN_V1_INIT...</div>
+    </div>
+
+    <div class="mesh-bg"></div>
+    <div class="grid-system"></div>
+
+    <div class="container">
+        <header>
+            <h1 class="hero-title">LUMINAXE<span style="color: var(--p-glow);">.</span></h1>
+            <p style="color: var(--s-glow); letter-spacing: 5px; text-transform: uppercase;">LGS Adrenalin & Strategy Mapping</p>
+        </header>
+
+        <h2 class="section-header">SYSTEM // EXAM_SCAN</h2>
+        <div class="quiz-container" id="quiz-box">
+            <div id="quiz-content" style="width: 100%; max-width: 800px; text-align: center;">
+                <p style="font-family: 'Orbitron'; font-size: 2rem; margin-bottom: 20px;">READY FOR SYNC</p>
+                <p style="margin-bottom: 40px; opacity: 0.7;">Sınav stratejini ve stres seviyeni analiz et. LGS Savaşçısı modun test edilecek.</p>
+                <button class="option-btn" style="background: var(--p-glow); border: none; color: #fff; text-align: center;" onclick="beginQuiz()">ADRENALİN MODUNU BAŞLAT</button>
+            </div>
+        </div>
+
+        <footer style="padding: 80px 0; text-align: center; opacity: 0.4; font-family: var(--font-code); font-size: 0.8rem;">
+            LUMINAXE // LGS_EDITION_V1.0 // DEV_BY_SOFIA
+        </footer>
+    </div>
+
+    <script>
+        const quizData = [
+            { q: "Deneme sınavında çok zor bir Matematik sorusuyla karşılaştın.", a: "Moralim bozulur, diğer soruları da etkiler.", b: "İnat ederim, o soruyu çözmeden geçmem.", c: "Hemen işaret koyar, turlama taktiğiyle sona bırakırım.", d: "Soruya bir süre bakar, sonra boş bırakırım." },
+            { q: "Sınava az bir süre kaldı, ne hissediyorsun?", a: "Sürekli eksiklerimi düşünüp panik yapıyorum.", b: "Tempoyu artırıp her gün deneme çözüyorum.", c: "Eksik konularımı listeleyip nokta atışı çalışıyorum.", d: "Zaten elimden geleni yaptım deyip sakince bekliyorum." },
+            { q: "İngilizce kelime ezberleme yöntemin nedir?", a: "Sadece okurum ama çabuk unuturum.", b: "Kelime kartları hazırlar, kendimi test ederim.", c: "Cümle içinde kullanıp mantığını kavrarım.", d: "Oyun oynarken veya müzik dinlerken öğrenirim." },
+            { q: "Türkçe paragraf sorularında hangisi sensin?", a: "Soruyu okurken hayallere dalarım.", b: "Hızlıca okur, ana fikri hemen yakalarım.", c: "Şıkları eleyerek en mantıklısına giderim.", d: "Paragrafı üç kere okumadan emin olamam." },
+            { q: "Fen Bilimleri laboratuvar sorusu geldiğinde?", a: "Görsellere bakıp karmaşık bulurum.", b: "Değişkenleri (bağımlı/bağımsız) anında ayıklarım.", c: "Deneyin sonucunu teorik bilgimle birleştiririm.", d: "Genelde şıklardan giderek bulurum." },
+            { q: "Mola verdiğinde genellikle ne yaparsın?", a: "Sosyal medyada vakit geçiririm.", b: "Bir sonraki çalışma saati için plan yaparım.", c: "Unity açıp biraz kod yazar veya proje kurcalarım.", d: "Sadece uzanır ve dinlenirim." },
+            { q: "Netlerin beklediğinden düşük geldiğinde tepkin?", a: "Moralim sıfıra iner ve çalışmak istemem.", b: "Hırs yapıp o konudan hemen soru çözerim.", c: "Yanlışlarımın analizini yapıp videolu çözümleri izlerim.", d: "Bir dahaki sefere düzelir der geçerim." },
+            { q: "Sınav sabahı kahvaltın nasıl olur?", a: "Heyecandan hiçbir şey yiyemem.", b: "Enerji verecek her şeyi tüketirim.", c: "Yulaf, chia ve bal karışımı.", d: "Standart bir kahvaltı yaparım." },
+            { q: "Sınavda optik formu doldurma tarzın?", a: "En son toplu doldururum, yetişmezse diye korkarım.", b: "Her sorudan sonra anında kodlarım.", c: "Sayfa sayfa kodlamayı tercih ederim.", d: "Rastgele kodlarım." },
+            { q: "LGS bittiği an yapacağın ilk şey?", a: "Sonuçlar açıklanana kadar uyumak.", b: "Yeni bilgisayarım için parçaları seçmek.", c: "Yazılım projelerime ve Unity'e odaklanmak.", d: "Arkadaşlarımla dışarı çıkmak." }
+        ];
+
+        let currentQ = 0;
+        let scores = { drama: 0, boss: 0, system: 0, observer: 0 };
+
+        function startSystem() { setTimeout(() => { }, 3500); }
+
+        function beginQuiz() { renderQuestion(); }
+
+        function renderQuestion() {
+            const content = document.getElementById('quiz-content');
+            const q = quizData[currentQ];
+            content.style.textAlign = "left";
+            content.innerHTML = `
+                <div class="progress-meta">EXAM_SYNC: ${currentQ + 1} / ${quizData.length}</div>
+                <p style="color: var(--s-glow); margin-bottom: 10px; font-family: var(--font-code);">[ SEQUENCE_${currentQ + 1} ]</p>
+                <p style="font-size: 1.5rem; margin-bottom: 30px; font-family: 'Orbitron'; line-height: 1.4;">${q.q}</p>
+                <button class="option-btn" onclick="next('drama')">A > ${q.a}</button>
+                <button class="option-btn" onclick="next('boss')">B > ${q.b}</button>
+                <button class="option-btn" onclick="next('system')">C > ${q.c}</button>
+                <button class="option-btn" onclick="next('observer')">D > ${q.d}</button>
+            `;
+        }
+
+        function next(type) {
+            scores[type]++;
+            currentQ++;
+            if (currentQ < quizData.length) renderQuestion(); else showResult();
+        }
+
+        function showResult() {
+            const total = quizData.length;
+            const dP = Math.round((scores.drama / total) * 100);
+            const bP = Math.round((scores.boss / total) * 100);
+            const sP = Math.round((scores.system / total) * 100);
+
+            document.getElementById('quiz-content').innerHTML = `
+                <h2 style="font-family: 'Orbitron'; color: var(--p-glow); font-size: 2.5rem; margin-bottom: 20px;">LGS SYNC: COMPLETE</h2>
+                <div class="result-card">
+                    <div class="stat-line">
+                        <span>STRES SEVİYESİ (ANXIETY): %${dP}</span>
+                        <div class="bar-bg"><div class="bar-fill" style="width:${dP}%; background:var(--ash-color)"></div></div>
+                    </div>
+                    <div class="stat-line">
+                        <span>ODAKLANMA GÜCÜ (FOCUS): %${bP}</span>
+                        <div class="bar-bg"><div class="bar-fill" style="width:${bP}%; background:var(--lucy-color)"></div></div>
+                    </div>
+                    <div class="stat-line">
+                        <span>STRATEJİK MANTIK (LOGIC): %${sP}</span>
+                        <div class="bar-bg"><div class="bar-fill" style="width:${sP}%; background:var(--p-glow)"></div></div>
+                    </div>
+                </div>
+                <p style="margin-top:20px; opacity:0.7; font-size:0.9rem;">> Rapor: ${sP > 40 ? 'Sistem mimarı gibi stratejik ilerliyorsun. Unity projelerin için bu disiplin çok işine yarayacak!' : 'Duygusal frekansların yüksek; 7 Haziran hedefine odaklanırken biraz daha soğukkanlı olmaya çalış.'}</p>
+                <button class="option-btn" style="margin-top:30px; text-align: center; width: auto; padding: 15px 40px;" onclick="location.reload()">RE-BOOT SYSTEM</button>
+            `;
+        }
+    </script>
+</body>
+</html>
+
